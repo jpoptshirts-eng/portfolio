@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venture Landing Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --text: #f8fbff;
+        --muted: rgba(248, 251, 255, 0.78);
+        --glass: rgba(240, 246, 255, 0.16);
+        --glass-border: rgba(246, 250, 255, 0.4);
+        --primary: #d7e8ff;
+        --dark: rgba(4, 10, 20, 0.7);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        font-family: "Inter", sans-serif;
+        color: var(--text);
+        background: #020a16;
+      }
+
+      .page {
+        position: relative;
+        min-height: 100vh;
+        isolation: isolate;
+        overflow: hidden;
+      }
+
+      .background-video {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -3;
+      }
+
+      .bg-fallback {
+        position: fixed;
+        inset: 0;
+        z-index: -4;
+        background: radial-gradient(circle at 40% 20%, #86b4e8 0%, #3f78b0 40%, #1c3357 100%);
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background:
+          linear-gradient(to bottom, rgba(12, 26, 48, 0.1), rgba(2, 10, 20, 0.62)),
+          radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), rgba(2, 10, 20, 0.55));
+      }
+
+      .shell {
+        width: min(1200px, 92vw);
+        margin: 0 auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .top-nav {
+        position: sticky;
+        top: 1rem;
+        z-index: 20;
+        margin: 1rem auto 0;
+        width: fit-content;
+        max-width: 100%;
+        border: 1px solid var(--glass-border);
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        border-radius: 999px;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.24);
+        padding: 0.35rem;
+      }
+
+      .nav-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-link,
+      .nav-cta {
+        border: 0;
+        border-radius: 999px;
+        color: var(--text);
+        background: transparent;
+        font: 500 0.92rem/1 "Inter", sans-serif;
+        letter-spacing: 0.01em;
+        text-decoration: none;
+        padding: 0.72rem 1.05rem;
+        transition: 170ms ease;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .nav-cta {
+        background: rgba(255, 255, 255, 0.9);
+        color: #112138;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .hero {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 4rem 0 2.2rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border-radius: 999px;
+        padding: 0.35rem 0.7rem;
+        background: rgba(237, 243, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        font-size: 0.78rem;
+        color: rgba(248, 251, 255, 0.94);
+      }
+
+      .badge span {
+        font-size: 0.68rem;
+        border-radius: 999px;
+        padding: 0.22rem 0.45rem;
+        background: rgba(255, 255, 255, 0.92);
+        color: #162740;
+        font-weight: 600;
+      }
+
+      .hero h1 {
+        margin-top: 1.45rem;
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(2.25rem, 8.5vw, 5.8rem);
+        line-height: 0.93;
+        letter-spacing: 0.01em;
+        text-wrap: balance;
+        text-shadow: 0 8px 35px rgba(0, 0, 0, 0.26);
+      }
+
+      .hero p {
+        margin-top: 1.3rem;
+        margin-inline: auto;
+        max-width: 62ch;
+        color: var(--muted);
+        font-size: clamp(0.92rem, 2.1vw, 1.05rem);
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        margin-top: 1.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        text-decoration: none;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        padding: 0.85rem 1.35rem;
+        font-weight: 500;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.48rem;
+        transition: 190ms ease;
+      }
+
+      .btn-primary {
+        color: #10223b;
+        background: linear-gradient(180deg, #f6fbff 0%, var(--primary) 100%);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 28px rgba(3, 8, 18, 0.35);
+      }
+
+      .btn-secondary {
+        color: var(--text);
+        background: rgba(230, 240, 255, 0.1);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(230, 240, 255, 0.2);
+      }
+
+      .partners {
+        width: 100%;
+        margin: 0 auto 2.2rem;
+        text-align: center;
+      }
+
+      .partners-label {
+        color: rgba(248, 251, 255, 0.72);
+        font-size: 0.82rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .partners-list {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.6rem;
+      }
+
+      .partners-list li {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .tool-logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .tool-logo img {
+        width: 1.9rem;
+        height: 1.9rem;
+        object-fit: contain;
+        display: block;
+        filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+      }
+
+      @media (max-width: 860px) {
+        .top-nav {
+          width: min(100%, 780px);
+          border-radius: 24px;
+        }
+
+        .nav-row {
+          row-gap: 0.15rem;
+        }
+
+        .nav-link,
+        .nav-cta {
+          font-size: 0.86rem;
+          padding: 0.62rem 0.86rem;
+        }
+
+        .hero {
+          padding-top: 3rem;
+        }
+
+        .partners-list {
+          gap: 1.1rem;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          width: min(1200px, 94vw);
+        }
+
+        .hero {
+          padding-top: 2.2rem;
+        }
+
+        .hero p {
+          line-height: 1.5;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .hero-actions {
+          width: min(380px, 100%);
+          margin-inline: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="bg-fallback" aria-hidden="true"></div>
+      <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
+        <!-- Replace with your own video file -->
+        <source src="./Assets/background-video.mp4" type="video/mp4" />
+      </video>
+      <div class="overlay" aria-hidden="true"></div>
+
+      <div class="shell">
+        <header class="top-nav">
+          <nav class="nav-row" aria-label="Main navigation">
+            <a
+              class="nav-link"
+              href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko"
+              target="_blank"
+              rel="noreferrer"
+              >Quick Shop</a
+            >
+            <a
+              class="nav-link"
+              href="https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr"
+              target="_blank"
+              rel="noreferrer"
+              >Cellar</a
+            >
+            <a
+              class="nav-link"
+              href="https://www.figma.com/deck/FPpqy03EnPRKGLLGrJb2g4"
+              target="_blank"
+              rel="noreferrer"
+              >Meal Plans</a
+            >
+            <a
+              class="nav-link"
+              href="https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc"
+              target="_blank"
+              rel="noreferrer"
+              >PrimaryBid</a
+            >
+            <a
+              class="nav-link"
+              href="https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12"
+              target="_blank"
+              rel="noreferrer"
+              >Kaizen</a
+            >
+          </nav>
+        </header>
+
+        <section class="hero">
+          <div>
+            <div class="badge"><span>New</span> Click the case studies in the header to view my work</div>
+            <h1>
+              Designing Products That
+              <br />
+              Drive Measurable Growth
+            </h1>
+            <p>
+              I am Jacinto de Matos, a Senior Product Designer with 10+ years building impactful
+              fintech, retail, and AI experiences from strategy through execution.
+            </p>
+            <div class="hero-actions">
+              <a
+                class="btn btn-primary"
+                href="https://jacintos-portfolio.webflow.io/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                View website
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <footer class="partners">
+          <p class="partners-label">Built using Cursor and Kling 2.0</p>
+          <ul class="partners-list" aria-label="Tools used">
+            <li class="tool-logo" aria-label="Cursor logo">
+              <img src="./Assets/cursor-icon.png" alt="Cursor icon" />
+            </li>
+            <li class="tool-logo kling" aria-label="Kling 2.0 logo">
+              <img src="./Assets/kling-icon.png" alt="Kling 2.0 icon" />
+            </li>
+          </ul>
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>
