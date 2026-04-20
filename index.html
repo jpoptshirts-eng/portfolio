@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Venture Landing Page</title>
+    <title>Case Studies</title>
+    <link rel="icon" type="image/png" href="./Assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -96,6 +97,24 @@
         gap: 0.4rem;
         flex-wrap: wrap;
         justify-content: center;
+      }
+
+      .nav-toggle {
+        display: none;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 999px;
+        background: rgba(230, 240, 255, 0.08);
+        color: var(--text);
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .nav-toggle svg {
+        width: 1.2rem;
+        height: 1.2rem;
       }
 
       .nav-link,
@@ -303,6 +322,39 @@
           margin-inline: auto;
         }
       }
+
+      @media (max-width: 544px) {
+        .top-nav {
+          width: min(100%, 520px);
+          border-radius: 18px;
+          padding: 0.5rem;
+          margin-top: 0.75rem;
+        }
+
+        .nav-toggle {
+          display: inline-flex;
+        }
+
+        .nav-row {
+          display: none;
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.35rem;
+          margin-top: 0.5rem;
+        }
+
+        .top-nav.is-open .nav-row {
+          display: flex;
+        }
+
+        .nav-link {
+          width: 100%;
+          text-align: center;
+          border-radius: 12px;
+          padding: 0.72rem 0.9rem;
+        }
+      }
     </style>
   </head>
   <body>
@@ -316,7 +368,23 @@
 
       <div class="shell">
         <header class="top-nav">
-          <nav class="nav-row" aria-label="Main navigation">
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-label="Toggle case study menu"
+            aria-expanded="false"
+            aria-controls="mobile-case-studies"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 7h16M4 12h16M4 17h16"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <nav class="nav-row" id="mobile-case-studies" aria-label="Main navigation">
             <a
               class="nav-link"
               href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko"
@@ -394,5 +462,33 @@
         </footer>
       </div>
     </main>
+    <script>
+      const navRoot = document.querySelector(".top-nav");
+      const navToggle = document.querySelector(".nav-toggle");
+      const navLinks = document.querySelectorAll(".nav-row .nav-link");
+
+      if (navRoot && navToggle) {
+        navToggle.addEventListener("click", () => {
+          const isOpen = navRoot.classList.toggle("is-open");
+          navToggle.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        navLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            if (window.innerWidth <= 544) {
+              navRoot.classList.remove("is-open");
+              navToggle.setAttribute("aria-expanded", "false");
+            }
+          });
+        });
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth > 544) {
+            navRoot.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    </script>
   </body>
 </html>
