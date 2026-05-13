@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Snapwish — Product information</title>
+    <link rel="icon" type="image/png" href="../Assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --text: #f8fbff;
+        --muted: rgba(248, 251, 255, 0.78);
+        --glass: rgba(240, 246, 255, 0.16);
+        --glass-border: rgba(246, 250, 255, 0.4);
+        --primary: #d7e8ff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        font-family: "Inter", sans-serif;
+        color: var(--text);
+        background: #020a16;
+      }
+
+      .page {
+        position: relative;
+        min-height: 100vh;
+        isolation: isolate;
+        overflow-x: hidden;
+      }
+
+      .background-video {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -3;
+      }
+
+      .bg-fallback {
+        position: fixed;
+        inset: 0;
+        z-index: -4;
+        background: radial-gradient(circle at 40% 20%, #86b4e8 0%, #3f78b0 40%, #1c3357 100%);
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background:
+          linear-gradient(to bottom, rgba(12, 26, 48, 0.1), rgba(2, 10, 20, 0.62)),
+          radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), rgba(2, 10, 20, 0.55));
+      }
+
+      .shell {
+        width: min(720px, 92vw);
+        margin: 0 auto;
+        padding: 2.5rem 0 3.5rem;
+      }
+
+      .panel {
+        border: 1px solid var(--glass-border);
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        border-radius: 22px;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.24);
+        padding: clamp(1.5rem, 4vw, 2.25rem);
+      }
+
+      h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(1.85rem, 5vw, 2.65rem);
+        line-height: 1.15;
+        letter-spacing: 0.01em;
+        text-wrap: balance;
+        margin-bottom: 0.35rem;
+      }
+
+      .lede {
+        color: var(--muted);
+        font-size: 1.02rem;
+        line-height: 1.65;
+        margin-bottom: 1.75rem;
+      }
+
+      article section {
+        margin-top: 1.65rem;
+      }
+
+      article section:first-of-type {
+        margin-top: 0;
+      }
+
+      h2 {
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-bottom: 0.65rem;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+        font-size: 0.97rem;
+        line-height: 1.65;
+      }
+
+      p + p {
+        margin-top: 0.75rem;
+      }
+
+      ul {
+        margin: 0.5rem 0 0 1.1rem;
+      }
+
+      li + li {
+        margin-top: 0.45rem;
+      }
+
+      .affiliate-box {
+        margin-top: 0.75rem;
+        padding: 1rem 1.1rem;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: rgba(4, 12, 24, 0.45);
+      }
+
+      .affiliate-box p {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .categories {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .contact {
+        margin-top: 0.5rem;
+      }
+
+      .contact a {
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(215, 232, 255, 0.35);
+      }
+
+      .contact a:hover {
+        border-bottom-color: var(--primary);
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          padding: 1.5rem 0 2.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="bg-fallback" aria-hidden="true"></div>
+      <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
+        <source src="../Assets/background-video.mp4" type="video/mp4" />
+      </video>
+      <div class="overlay" aria-hidden="true"></div>
+
+      <div class="shell">
+        <article class="panel">
+          <h1>Snapwish</h1>
+          <p class="lede">
+            Snapwish is a wishlist and group gifting app designed to make gift planning easier. It
+            helps people discover products, save items, vote with friends and buy gifts from
+            external retailers.
+          </p>
+
+          <section aria-labelledby="h-features">
+            <h2 id="h-features">Main features</h2>
+            <ul>
+              <li>Snap a photo of an item to find similar products</li>
+              <li>Search products from supported retailers</li>
+              <li>Create personal wishlists</li>
+              <li>Create group gift lists</li>
+              <li>Vote on gift options</li>
+              <li>Let contributors claim or mark items as purchased</li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="h-flow">
+            <h2 id="h-flow">Purchases and retailers</h2>
+            <p>
+              Users can take a photo of a product they like, search for similar items, save products
+              to a wishlist, invite friends, vote on gift options and coordinate who is buying what.
+            </p>
+            <p>
+              Snapwish does not process payments in the MVP. When users choose to buy an item, they
+              are taken to the relevant retailer website, such as Amazon, to complete the purchase
+              securely.
+            </p>
+          </section>
+
+          <section aria-labelledby="h-amazon">
+            <h2 id="h-amazon">How Amazon links are used</h2>
+            <p>
+              Snapwish may show Amazon product links when users search for items or save gift ideas,
+              so they can view details and complete purchases on Amazon when they choose to.
+            </p>
+            <p>
+              Snapwish may display affiliate links to products from Amazon and other retailers.
+            </p>
+            <div class="affiliate-box">
+              <p>As an Amazon Associate, Snapwish earns from qualifying purchases.</p>
+            </div>
+          </section>
+
+          <section aria-labelledby="h-categories">
+            <h2 id="h-categories">Product categories</h2>
+            <p class="categories">
+              Users may browse or save ideas across many kinds of gifts and products, including home
+              gifts, tech, headphones, bottles, trainers, beauty, fashion, toys, birthday gifts,
+              leaving gifts and Christmas gifts. Actual availability depends on supported retailers
+              and search results.
+            </p>
+          </section>
+
+          <section aria-labelledby="h-status">
+            <h2 id="h-status">App status</h2>
+            <p>
+              The app is currently in prototype and MVP development, with dedicated iOS and Android
+              releases planned.
+            </p>
+          </section>
+
+          <section class="contact" aria-labelledby="h-contact">
+            <h2 id="h-contact">Contact</h2>
+            <p>
+              <strong style="color: var(--text); font-weight: 600">Jac</strong>
+              — enquiries:
+              <a href="https://jacintos-portfolio.webflow.io/" target="_blank" rel="noreferrer"
+                >jacintos-portfolio.webflow.io</a
+              >
+            </p>
+          </section>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

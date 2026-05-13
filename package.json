@@ -1,0 +1,7 @@
+{
+  "name": "case-studies",
+  "private": true,
+  "scripts": {
+    "dev": "npx --yes serve . -l 8000"
+  }
+}
