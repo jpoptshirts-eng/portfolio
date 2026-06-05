@@ -253,6 +253,102 @@
         filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
       }
 
+      .password-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+      }
+
+      .password-modal[hidden] {
+        display: none;
+      }
+
+      .password-modal__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(2, 10, 20, 0.72);
+        backdrop-filter: blur(6px);
+      }
+
+      .password-modal__dialog {
+        position: relative;
+        width: min(360px, 100%);
+        border: 1px solid var(--glass-border);
+        background: rgba(8, 18, 34, 0.92);
+        backdrop-filter: blur(16px);
+        border-radius: 18px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        padding: 1.35rem 1.35rem 1.2rem;
+      }
+
+      .password-modal__dialog h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        margin-bottom: 0.9rem;
+      }
+
+      .password-modal__form {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .password-modal__input {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        font: 500 0.95rem/1.2 "Inter", sans-serif;
+        padding: 0.78rem 0.9rem;
+      }
+
+      .password-modal__input::placeholder {
+        color: rgba(248, 251, 255, 0.5);
+      }
+
+      .password-modal__input:focus {
+        outline: 2px solid rgba(215, 232, 255, 0.45);
+        outline-offset: 1px;
+      }
+
+      .password-modal__submit {
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #f6fbff 0%, var(--primary) 100%);
+        color: #10223b;
+        font: 600 0.92rem/1 "Inter", sans-serif;
+        padding: 0.78rem 1rem;
+        cursor: pointer;
+      }
+
+      .password-modal__error {
+        color: #ffb4b4;
+        font-size: 0.84rem;
+      }
+
+      .password-modal__error[hidden] {
+        display: none;
+      }
+
+      .password-modal__close {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        width: 2rem;
+        height: 2rem;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        font-size: 1.2rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+
       @media (max-width: 860px) {
         .top-nav {
           width: min(100%, 780px);
@@ -365,42 +461,42 @@
           </button>
           <nav class="nav-row" id="mobile-case-studies" aria-label="Main navigation">
             <a
-              class="nav-link"
+              class="nav-link protected-link"
               href="https://www.figma.com/deck/7tZvvjMAGYWm2TyfyCSe6n"
               target="_blank"
               rel="noreferrer"
               >Lists</a
             >
             <a
-              class="nav-link"
+              class="nav-link protected-link"
               href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko"
               target="_blank"
               rel="noreferrer"
               >Quick Shop</a
             >
             <a
-              class="nav-link"
+              class="nav-link protected-link"
               href="https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr"
               target="_blank"
               rel="noreferrer"
               >Cellar</a
             >
             <a
-              class="nav-link"
+              class="nav-link protected-link"
               href="https://www.figma.com/deck/FPpqy03EnPRKGLLGrJb2g4"
               target="_blank"
               rel="noreferrer"
               >Meal Plans</a
             >
             <a
-              class="nav-link"
+              class="nav-link protected-link"
               href="https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc"
               target="_blank"
               rel="noreferrer"
               >PrimaryBid</a
             >
             <a
-              class="nav-link"
+              class="nav-link protected-link"
               href="https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12"
               target="_blank"
               rel="noreferrer"
@@ -420,7 +516,7 @@
             </p>
             <div class="hero-actions">
               <a
-                class="btn btn-primary"
+                class="btn btn-primary protected-link"
                 href="https://www.jacinto.website/"
                 target="_blank"
                 rel="noreferrer"
@@ -445,24 +541,140 @@
         </footer>
       </div>
     </main>
+
+    <div class="password-modal" id="password-modal" hidden>
+      <div class="password-modal__backdrop" data-close-modal></div>
+      <div
+        class="password-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="password-modal-title"
+      >
+        <button class="password-modal__close" type="button" data-close-modal aria-label="Close">
+          &times;
+        </button>
+        <h2 id="password-modal-title">Password protected</h2>
+        <form class="password-modal__form" id="password-form">
+          <input
+            class="password-modal__input"
+            id="password-input"
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            autocomplete="current-password"
+            required
+          />
+          <p class="password-modal__error" id="password-error" hidden>Incorrect password</p>
+          <button class="password-modal__submit" type="submit">Continue</button>
+        </form>
+      </div>
+    </div>
+
     <script>
+      const PASSWORD = "1@345";
+      const UNLOCK_KEY = "case-studies-unlocked";
+
       const navRoot = document.querySelector(".top-nav");
       const navToggle = document.querySelector(".nav-toggle");
       const navLinks = document.querySelectorAll(".nav-row .nav-link");
+      const protectedLinks = document.querySelectorAll(".protected-link");
+      const passwordModal = document.getElementById("password-modal");
+      const passwordForm = document.getElementById("password-form");
+      const passwordInput = document.getElementById("password-input");
+      const passwordError = document.getElementById("password-error");
+
+      let pendingUrl = "";
+      let pendingTarget = "_self";
+
+      function isUnlocked() {
+        return sessionStorage.getItem(UNLOCK_KEY) === "true";
+      }
+
+      function unlockSession() {
+        sessionStorage.setItem(UNLOCK_KEY, "true");
+      }
+
+      function closeMobileNav() {
+        if (navRoot && navToggle && window.innerWidth <= 544) {
+          navRoot.classList.remove("is-open");
+          navToggle.setAttribute("aria-expanded", "false");
+        }
+      }
+
+      function openProtectedLink(url, target) {
+        if (target === "_blank") {
+          window.open(url, "_blank", "noopener,noreferrer");
+        } else {
+          window.location.href = url;
+        }
+      }
+
+      function openPasswordModal(url, target) {
+        pendingUrl = url;
+        pendingTarget = target || "_self";
+        passwordError.hidden = true;
+        passwordForm.reset();
+        passwordModal.hidden = false;
+        passwordInput.focus();
+      }
+
+      function closePasswordModal() {
+        passwordModal.hidden = true;
+        pendingUrl = "";
+        pendingTarget = "_self";
+        passwordError.hidden = true;
+        passwordForm.reset();
+      }
+
+      protectedLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const url = link.href;
+          const target = link.target || "_self";
+
+          closeMobileNav();
+
+          if (isUnlocked()) {
+            openProtectedLink(url, target);
+            return;
+          }
+
+          openPasswordModal(url, target);
+        });
+      });
+
+      passwordForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (passwordInput.value === PASSWORD) {
+          unlockSession();
+          passwordError.hidden = true;
+          const url = pendingUrl;
+          const target = pendingTarget;
+          closePasswordModal();
+          openProtectedLink(url, target);
+          return;
+        }
+
+        passwordError.hidden = false;
+        passwordInput.focus();
+        passwordInput.select();
+      });
+
+      document.querySelectorAll("[data-close-modal]").forEach((element) => {
+        element.addEventListener("click", closePasswordModal);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !passwordModal.hidden) {
+          closePasswordModal();
+        }
+      });
 
       if (navRoot && navToggle) {
         navToggle.addEventListener("click", () => {
           const isOpen = navRoot.classList.toggle("is-open");
           navToggle.setAttribute("aria-expanded", String(isOpen));
-        });
-
-        navLinks.forEach((link) => {
-          link.addEventListener("click", () => {
-            if (window.innerWidth <= 544) {
-              navRoot.classList.remove("is-open");
-              navToggle.setAttribute("aria-expanded", "false");
-            }
-          });
         });
 
         window.addEventListener("resize", () => {
