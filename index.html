@@ -213,44 +213,271 @@
         background: rgba(230, 240, 255, 0.2);
       }
 
-      .partners {
+      .utility-link {
         width: 100%;
         margin: 0 auto 2.2rem;
-        text-align: center;
-      }
-
-      .partners-label {
-        color: rgba(248, 251, 255, 0.72);
-        font-size: 0.82rem;
-        margin-bottom: 0.8rem;
-      }
-
-      .partners-list {
-        list-style: none;
         display: flex;
         justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1.6rem;
       }
 
-      .partners-list li {
+      .map-link {
+        border: 0;
+        background: transparent;
+        color: rgba(248, 251, 255, 0.82);
+        font: 500 0.86rem/1 "Inter", sans-serif;
+        letter-spacing: 0.02em;
         display: inline-flex;
         align-items: center;
+        gap: 0.45rem;
+        padding: 0.35rem 0.55rem;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: 170ms ease;
       }
 
-      .tool-logo {
+      .map-link:hover,
+      .map-link:focus-visible {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.1);
+        outline: none;
+      }
+
+      .map-link__icon {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+
+      .map-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 110;
+        display: grid;
+        place-items: center;
+        padding: 1.25rem;
+      }
+
+      .map-modal[hidden] {
+        display: none;
+      }
+
+      .map-modal__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(2, 10, 20, 0.55);
+        backdrop-filter: blur(4px);
+      }
+
+      .map-modal__dialog {
+        position: relative;
+        width: min(1100px, 90vw);
+        max-height: min(94vh, 920px);
+        background: #fff;
+        color: #10223b;
+        border-radius: 20px;
+        box-shadow: 0 28px 70px rgba(2, 10, 20, 0.28);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .map-modal__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.35rem 1.5rem 0.85rem;
+        flex-shrink: 0;
+      }
+
+      .map-modal__title {
         display: inline-flex;
         align-items: center;
+        gap: 0.55rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #10223b;
+      }
+
+      .map-modal__title-icon {
+        width: 1.1rem;
+        height: 1.1rem;
+        color: #475569;
+      }
+
+      .map-modal__close {
+        width: 2.25rem;
+        height: 2.25rem;
+        border: 0;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: #334155;
+        font-size: 1.35rem;
+        line-height: 1;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .map-modal__close:hover,
+      .map-modal__close:focus-visible {
+        background: #e2e8f0;
+        outline: 2px solid rgba(37, 99, 235, 0.35);
+        outline-offset: 1px;
+      }
+
+      .map-modal__body {
+        overflow: auto;
+        padding: 2rem 2.5rem 2.5rem;
+        -webkit-overflow-scrolling: touch;
+        display: flex;
         justify-content: center;
       }
 
-      .tool-logo img {
-        width: 1.9rem;
-        height: 1.9rem;
-        object-fit: contain;
-        display: block;
-        filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+      .map-diagram {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .map-diagram--desktop {
+        display: flex;
+      }
+
+      .map-diagram--mobile {
+        display: none;
+        width: 100%;
+      }
+
+      .map-stage {
+        position: relative;
+        width: 1100px;
+        max-width: 100%;
+        aspect-ratio: 1100 / 760;
+        height: auto;
+        margin: 0 auto;
+        flex-shrink: 0;
+      }
+
+      .map-stage__svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        z-index: 0;
+      }
+
+      .map-card {
+        position: absolute;
+        z-index: 1;
+        padding: 0;
+        background: transparent;
+        font-family: "Inter", sans-serif;
+        line-height: 1.45;
+        box-sizing: border-box;
+      }
+
+      .map-card--anchor-left {
+        width: calc(236 / 1100 * 100%);
+        text-align: left;
+      }
+
+      .map-card--anchor-right {
+        width: calc(280 / 1100 * 100%);
+        text-align: left;
+      }
+
+      .map-card--anchor-center {
+        width: calc(260 / 1100 * 100%);
+        text-align: left;
+      }
+
+      .map-card__title {
+        margin: 0 0 8px;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .map-card__desc {
+        margin: 0;
+        font-size: 14px;
+        color: #64748b;
+        max-width: 260px;
+      }
+
+      .map-card--title-only .map-card__title {
+        margin: 0;
+      }
+
+      .map-card--red .map-card__title { color: #c41e3a; }
+      .map-card--pink .map-card__title { color: #d63f86; }
+      .map-card--green .map-card__title { color: #2d8a4e; }
+      .map-card--blue .map-card__title { color: #1e5fcc; }
+      .map-card--orange .map-card__title { color: #e8740c; }
+      .map-card--purple .map-card__title { color: #7b4ec9; }
+      .map-card--lime .map-card__title { color: #16a34a; }
+
+      .map-mobile-stage {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        gap: 0 14px;
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        align-items: stretch;
+        padding-bottom: 0.5rem;
+      }
+
+      .map-mobile-stage__rail {
+        position: relative;
+        min-height: 100%;
+      }
+
+      .map-mobile-stage__svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .map-mobile-stage__cards {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        padding: 0.25rem 0 0;
+      }
+
+      .map-mobile-stage .map-card {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .map-mobile-stage .map-card:not(.map-card--title-only) {
+        min-height: 96px;
+      }
+
+      .map-mobile-stage .map-card--title-only {
+        min-height: 36px;
+      }
+
+      .map-mobile-stage .map-card__desc {
+        max-width: none;
+      }
+
+      .map-stage .map-card__title {
+        font-size: clamp(14px, 1.45vw, 17px);
+      }
+
+      .map-stage .map-card__desc {
+        font-size: clamp(12px, 1.2vw, 14px);
+      }
+
+      body.map-modal-open {
+        overflow: hidden;
       }
 
       .password-modal {
@@ -369,8 +596,48 @@
           padding-top: 3rem;
         }
 
-        .partners-list {
-          gap: 1.1rem;
+      }
+
+      @media (max-width: 767px) {
+        .map-modal {
+          padding: 0;
+          place-items: stretch;
+        }
+
+        .map-modal__dialog {
+          width: 100%;
+          max-height: none;
+          min-height: 100%;
+          height: 100%;
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        .map-modal__header {
+          padding: 1rem 1rem 0.75rem;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .map-modal__body {
+          padding: 1rem 1rem 1.5rem;
+          flex: 1;
+          display: block;
+        }
+
+        .map-diagram--desktop {
+          display: none;
+        }
+
+        .map-diagram--mobile {
+          display: block;
+        }
+
+        .map-card__title {
+          font-size: 18px;
+        }
+
+        .map-card__desc {
+          font-size: 15px;
         }
       }
 
@@ -528,19 +795,80 @@
           </div>
         </section>
 
-        <footer class="partners">
-          <p class="partners-label">Built using Cursor and Kling 2.0</p>
-          <ul class="partners-list" aria-label="Tools used">
-            <li class="tool-logo" aria-label="Cursor logo">
-              <img src="./Assets/cursor-icon.png" alt="Cursor icon" />
-            </li>
-            <li class="tool-logo kling" aria-label="Kling 2.0 logo">
-              <img src="./Assets/kling-icon.png" alt="Kling 2.0 icon" />
-            </li>
-          </ul>
-        </footer>
+        <div class="utility-link">
+          <button class="map-link" type="button" id="map-open" aria-haspopup="dialog">
+            <svg class="map-link__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 6.5 9 4l5 2.5 6-3v11.5l-6 3-5-2.5L4 18V6.5Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9 6.5v11.5M14 9v11.5"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+            Map
+          </button>
+        </div>
       </div>
     </main>
+
+    <div
+      class="map-modal"
+      id="map-modal"
+      hidden
+      role="presentation"
+      aria-label="Portfolio map of case studies and profile links"
+    >
+      <div class="map-modal__backdrop" data-close-map-modal></div>
+      <div
+        class="map-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="map-modal-title"
+        tabindex="-1"
+      >
+        <div class="map-modal__header">
+          <h2 class="map-modal__title" id="map-modal-title">
+            <svg class="map-modal__title-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 6.5 9 4l5 2.5 6-3v11.5l-6 3-5-2.5L4 18V6.5Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9 6.5v11.5M14 9v11.5"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+            Map
+          </h2>
+          <button
+            class="map-modal__close"
+            type="button"
+            data-close-map-modal
+            aria-label="Close portfolio map"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="map-modal__body">
+          <div
+            id="map-desktop"
+            class="map-diagram map-diagram--desktop"
+            aria-label="Desktop portfolio map"
+          ></div>
+          <div id="map-mobile" class="map-diagram map-diagram--mobile" aria-label="Mobile portfolio map"></div>
+        </div>
+      </div>
+    </div>
 
     <div class="password-modal" id="password-modal" hidden>
       <div class="password-modal__backdrop" data-close-modal></div>
@@ -571,6 +899,394 @@
     </div>
 
     <script>
+      const MAP_STOPS = {
+        shoppingLists: {
+          title: "Shopping Lists",
+          desc: "AI assisted grocery list creation that turns customer intent into a draft trolley with less effort.",
+          tone: "blue",
+          stroke: "#1e5fcc",
+        },
+        quickShop: {
+          title: "Quick Shop",
+          desc: "A faster weekly shopping experience designed to reduce repeat effort and speed up trolley building.",
+          tone: "lime",
+          stroke: "#16a34a",
+        },
+        primaryBid: {
+          title: "PrimaryBid",
+          desc: "A regulated fintech case study focused on making complex investment journeys clearer, safer and easier to use.",
+          tone: "green",
+          stroke: "#2d8a4e",
+        },
+        kaizen: {
+          title: "Kaizen Languages",
+          desc: "A mobile learning experience designed to improve retention, motivation and confidence through better practice loops.",
+          tone: "purple",
+          stroke: "#7b4ec9",
+        },
+        cellar: {
+          title: "Cellar PDP",
+          desc: "A product page redesign that improves confidence, product understanding and purchase intent for wine shoppers.",
+          tone: "red",
+          stroke: "#c41e3a",
+        },
+        mealPlans: {
+          title: "Meal Plans",
+          desc: "A flexible meal planning journey that helps customers build shoppable weekly plans around real household needs.",
+          tone: "pink",
+          stroke: "#d63f86",
+        },
+        portfolio: {
+          title: "Portfolio Website",
+          tone: "orange",
+          stroke: "#e8740c",
+        },
+        linkedin: {
+          title: "LinkedIn",
+          tone: "orange",
+          stroke: "#e8740c",
+        },
+        cv: {
+          title: "CV",
+          tone: "orange",
+          stroke: "#e8740c",
+        },
+      };
+
+      const DESKTOP_HUB = { cx: 550, cy: 648 };
+      const DESKTOP_LEFT_STATION_X = 272;
+      const DESKTOP_LEFT_TRUNK_X = 306;
+      const DESKTOP_LEFT_GREEN_BRANCH_X = 448;
+      const DESKTOP_RIGHT_TRUNK_X = 692;
+      const DESKTOP_RIGHT_STATION_X = 766;
+      const DESKTOP_ORANGE_X = 734;
+      const DESKTOP_LABEL_GAP = 22;
+      const DESKTOP_LEFT_LABEL_WIDTH = 236;
+      const MOBILE_ROW_HEIGHT = 96;
+      const MOBILE_TITLE_ROW_HEIGHT = 36;
+      const MOBILE_GAP = 28;
+      const MOBILE_HUB_PADDING = 52;
+
+      const SVG_NS = "http://www.w3.org/2000/svg";
+
+      function svgEl(name, attrs = {}) {
+        const node = document.createElementNS(SVG_NS, name);
+        Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+        return node;
+      }
+
+      function addRoutePath(svg, path, stroke) {
+        svg.appendChild(
+          svgEl("path", {
+            d: path,
+            fill: "none",
+            stroke,
+            "stroke-width": 10,
+            "stroke-linejoin": "miter",
+            "stroke-linecap": "butt",
+          })
+        );
+      }
+
+      function addHub(svg, cx, cy) {
+        svg.appendChild(svgEl("circle", { cx, cy, r: 18, fill: "#0f172a" }));
+      }
+
+      function addStation(svg, cx, cy) {
+        svg.appendChild(
+          svgEl("circle", {
+            cx,
+            cy,
+            r: 9,
+            fill: "#fff",
+            stroke: "#1e293b",
+            "stroke-width": 2.5,
+          })
+        );
+      }
+
+      function createMapCard(stop, { titleOnly = false } = {}) {
+        const card = document.createElement("article");
+        card.className = `map-card map-card--${stop.tone}${titleOnly ? " map-card--title-only" : ""}`;
+
+        const title = document.createElement("p");
+        title.className = "map-card__title";
+        title.textContent = stop.title;
+        card.appendChild(title);
+
+        if (!titleOnly && stop.desc) {
+          const desc = document.createElement("p");
+          desc.className = "map-card__desc";
+          desc.textContent = stop.desc;
+          card.appendChild(desc);
+        }
+
+        return card;
+      }
+
+      function positionCard(card, left, top) {
+        card.style.left = `${(left / 1100) * 100}%`;
+        card.style.top = `${(top / 760) * 100}%`;
+      }
+
+      function positionCardLeftOfStation(card, stationX, stationY) {
+        card.classList.add("map-card--anchor-left");
+        positionCard(
+          card,
+          stationX - DESKTOP_LABEL_GAP - DESKTOP_LEFT_LABEL_WIDTH,
+          stationY - 42
+        );
+      }
+
+      function positionCardRightOfStation(card, stationX, stationY) {
+        card.classList.add("map-card--anchor-right");
+        positionCard(card, stationX + DESKTOP_LABEL_GAP, stationY - 40);
+      }
+
+      function positionCardAboveStation(card, stationX, stationY) {
+        card.classList.add("map-card--anchor-center");
+        positionCard(card, stationX - 138, stationY - 142);
+      }
+
+      function positionCardTitleBesideStation(card, stationX, stationY) {
+        card.classList.add("map-card--anchor-right", "map-card--title-only");
+        positionCard(card, stationX + DESKTOP_LABEL_GAP, stationY - 12);
+      }
+
+      function renderDesktopMap(root) {
+        const stage = document.createElement("div");
+        stage.className = "map-stage";
+
+        const svg = svgEl("svg", {
+          class: "map-stage__svg",
+          viewBox: "0 0 1100 760",
+          role: "img",
+          "aria-label": "Portfolio case study map",
+        });
+
+        const hubX = DESKTOP_HUB.cx;
+        const hubY = DESKTOP_HUB.cy;
+        const leftTrunkX = DESKTOP_LEFT_TRUNK_X;
+        const leftGreenBranchX = DESKTOP_LEFT_GREEN_BRANCH_X;
+        const leftStationX = DESKTOP_LEFT_STATION_X;
+        const rightTrunkX = DESKTOP_RIGHT_TRUNK_X;
+        const rightStationX = DESKTOP_RIGHT_STATION_X;
+        const orangeX = DESKTOP_ORANGE_X;
+        const blueX = hubX - 6;
+
+        const stops = {
+          cellar: { x: leftStationX, y: 92 },
+          mealPlans: { x: leftStationX, y: 312 },
+          primaryBid: { x: leftStationX, y: 532 },
+          shoppingLists: { x: blueX, y: 158 },
+          quickShop: { x: rightStationX, y: 92 },
+          kaizen: { x: rightStationX, y: 312 },
+          portfolio: { x: orangeX, y: 492 },
+          cv: { x: orangeX, y: 526 },
+          linkedin: { x: orangeX, y: 560 },
+        };
+
+        addRoutePath(svg, `M ${blueX} ${hubY} V ${stops.shoppingLists.y}`, MAP_STOPS.shoppingLists.stroke);
+        addRoutePath(
+          svg,
+          `M ${hubX} ${hubY} H ${leftTrunkX} V ${stops.cellar.y} H ${stops.cellar.x}`,
+          MAP_STOPS.cellar.stroke
+        );
+        addRoutePath(
+          svg,
+          `M ${hubX} ${hubY} H ${leftTrunkX} V ${stops.mealPlans.y} H ${stops.mealPlans.x}`,
+          MAP_STOPS.mealPlans.stroke
+        );
+        addRoutePath(
+          svg,
+          `M ${hubX} ${hubY} H ${leftGreenBranchX} V ${stops.primaryBid.y} H ${stops.primaryBid.x}`,
+          MAP_STOPS.primaryBid.stroke
+        );
+        addRoutePath(
+          svg,
+          `M ${hubX} ${hubY} H ${rightTrunkX} V ${stops.quickShop.y} H ${stops.quickShop.x}`,
+          MAP_STOPS.quickShop.stroke
+        );
+        addRoutePath(
+          svg,
+          `M ${hubX} ${hubY} H ${rightTrunkX} V ${stops.kaizen.y} H ${stops.kaizen.x}`,
+          MAP_STOPS.kaizen.stroke
+        );
+        addRoutePath(
+          svg,
+          `M ${hubX} ${hubY} H ${orangeX} V ${stops.portfolio.y}`,
+          MAP_STOPS.portfolio.stroke
+        );
+
+        addStation(svg, stops.cellar.x, stops.cellar.y);
+        addStation(svg, stops.mealPlans.x, stops.mealPlans.y);
+        addStation(svg, stops.primaryBid.x, stops.primaryBid.y);
+        addStation(svg, stops.shoppingLists.x, stops.shoppingLists.y);
+        addStation(svg, stops.quickShop.x, stops.quickShop.y);
+        addStation(svg, stops.kaizen.x, stops.kaizen.y);
+        addStation(svg, stops.portfolio.x, stops.portfolio.y);
+        addStation(svg, stops.cv.x, stops.cv.y);
+        addStation(svg, stops.linkedin.x, stops.linkedin.y);
+        addHub(svg, hubX, hubY);
+
+        stage.appendChild(svg);
+
+        const cellarCard = createMapCard(MAP_STOPS.cellar);
+        positionCardLeftOfStation(cellarCard, stops.cellar.x, stops.cellar.y);
+        stage.appendChild(cellarCard);
+
+        const mealPlansCard = createMapCard(MAP_STOPS.mealPlans);
+        positionCardLeftOfStation(mealPlansCard, stops.mealPlans.x, stops.mealPlans.y);
+        stage.appendChild(mealPlansCard);
+
+        const primaryBidCard = createMapCard(MAP_STOPS.primaryBid);
+        positionCardLeftOfStation(primaryBidCard, stops.primaryBid.x, stops.primaryBid.y);
+        stage.appendChild(primaryBidCard);
+
+        const shoppingCard = createMapCard(MAP_STOPS.shoppingLists);
+        positionCardAboveStation(shoppingCard, stops.shoppingLists.x, stops.shoppingLists.y);
+        stage.appendChild(shoppingCard);
+
+        const quickShopCard = createMapCard(MAP_STOPS.quickShop);
+        positionCardRightOfStation(quickShopCard, stops.quickShop.x, stops.quickShop.y);
+        stage.appendChild(quickShopCard);
+
+        const kaizenCard = createMapCard(MAP_STOPS.kaizen);
+        positionCardRightOfStation(kaizenCard, stops.kaizen.x, stops.kaizen.y);
+        stage.appendChild(kaizenCard);
+
+        const portfolioCard = createMapCard(MAP_STOPS.portfolio, { titleOnly: true });
+        positionCardTitleBesideStation(portfolioCard, stops.portfolio.x, stops.portfolio.y);
+        stage.appendChild(portfolioCard);
+
+        const cvCard = createMapCard(MAP_STOPS.cv, { titleOnly: true });
+        positionCardTitleBesideStation(cvCard, stops.cv.x, stops.cv.y);
+        stage.appendChild(cvCard);
+
+        const linkedinCard = createMapCard(MAP_STOPS.linkedin, { titleOnly: true });
+        positionCardTitleBesideStation(linkedinCard, stops.linkedin.x, stops.linkedin.y);
+        stage.appendChild(linkedinCard);
+
+        root.replaceChildren(stage);
+      }
+
+      function getMobileLayout() {
+        const rowHeights = [
+          MOBILE_ROW_HEIGHT,
+          MOBILE_ROW_HEIGHT,
+          MOBILE_ROW_HEIGHT,
+          MOBILE_ROW_HEIGHT,
+          MOBILE_ROW_HEIGHT,
+          MOBILE_ROW_HEIGHT,
+          MOBILE_TITLE_ROW_HEIGHT,
+          MOBILE_TITLE_ROW_HEIGHT,
+          MOBILE_TITLE_ROW_HEIGHT,
+        ];
+
+        let offset = 18;
+        const rowCenters = rowHeights.map((height) => {
+          const center = offset + height / 2;
+          offset += height + MOBILE_GAP;
+          return center;
+        });
+
+        const contentBottom = rowCenters[rowCenters.length - 1] + MOBILE_TITLE_ROW_HEIGHT / 2;
+        const hubY = contentBottom + MOBILE_HUB_PADDING;
+        const totalHeight = hubY + 24;
+
+        return { rowCenters, hubY, totalHeight };
+      }
+
+      function renderMobileMap(root) {
+        const { rowCenters, hubY, totalHeight } = getMobileLayout();
+        const spineX = 22;
+        const stationX = 58;
+        const orangeRailX = 14;
+
+        const stage = document.createElement("div");
+        stage.className = "map-mobile-stage";
+
+        const rail = document.createElement("div");
+        rail.className = "map-mobile-stage__rail";
+        rail.style.minHeight = `${totalHeight}px`;
+
+        const svg = svgEl("svg", {
+          class: "map-mobile-stage__svg",
+          viewBox: `0 0 72 ${totalHeight}`,
+          role: "img",
+          "aria-label": "Portfolio case study map for mobile",
+          preserveAspectRatio: "xMinYMin meet",
+        });
+
+        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[0]} H ${stationX}`, MAP_STOPS.shoppingLists.stroke);
+        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[1]} H ${stationX}`, MAP_STOPS.quickShop.stroke);
+        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[2]} H ${stationX}`, MAP_STOPS.cellar.stroke);
+        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[3]} H ${stationX}`, MAP_STOPS.mealPlans.stroke);
+        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[4]} H ${stationX}`, MAP_STOPS.primaryBid.stroke);
+        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[5]} H ${stationX}`, MAP_STOPS.kaizen.stroke);
+        addRoutePath(
+          svg,
+          `M ${spineX} ${hubY} H ${orangeRailX} V ${rowCenters[6]} H ${stationX} M ${orangeRailX} ${rowCenters[6]} V ${rowCenters[7]} H ${stationX} M ${orangeRailX} ${rowCenters[7]} V ${rowCenters[8]} H ${stationX}`,
+          MAP_STOPS.portfolio.stroke
+        );
+
+        rowCenters.forEach((rowY) => {
+          addStation(svg, stationX, rowY);
+        });
+        addHub(svg, spineX, hubY);
+
+        rail.appendChild(svg);
+
+        const cardsWrap = document.createElement("div");
+        cardsWrap.className = "map-mobile-stage__cards";
+
+        [
+          MAP_STOPS.shoppingLists,
+          MAP_STOPS.quickShop,
+          MAP_STOPS.cellar,
+          MAP_STOPS.mealPlans,
+          MAP_STOPS.primaryBid,
+          MAP_STOPS.kaizen,
+          MAP_STOPS.portfolio,
+          MAP_STOPS.cv,
+          MAP_STOPS.linkedin,
+        ].forEach((stop, index) => {
+          const titleOnly = index >= 6;
+          cardsWrap.appendChild(createMapCard(stop, { titleOnly }));
+        });
+
+        stage.appendChild(rail);
+        stage.appendChild(cardsWrap);
+        root.replaceChildren(stage);
+      }
+
+      function syncMapDiagramVisibility() {
+        const desktopRoot = document.getElementById("map-desktop");
+        const mobileRoot = document.getElementById("map-mobile");
+        if (!desktopRoot || !mobileRoot) {
+          return;
+        }
+
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        desktopRoot.setAttribute("aria-hidden", String(isMobile));
+        mobileRoot.setAttribute("aria-hidden", String(!isMobile));
+      }
+
+      function initPortfolioMaps() {
+        const desktopRoot = document.getElementById("map-desktop");
+        const mobileRoot = document.getElementById("map-mobile");
+        if (desktopRoot) {
+          renderDesktopMap(desktopRoot);
+        }
+        if (mobileRoot) {
+          renderMobileMap(mobileRoot);
+        }
+        syncMapDiagramVisibility();
+        window.addEventListener("resize", syncMapDiagramVisibility);
+      }
+
+      initPortfolioMaps();
+
       const PASSWORD = "1@345";
       const UNLOCK_KEY = "case-studies-unlocked";
 
@@ -582,9 +1298,13 @@
       const passwordForm = document.getElementById("password-form");
       const passwordInput = document.getElementById("password-input");
       const passwordError = document.getElementById("password-error");
+      const mapOpenButton = document.getElementById("map-open");
+      const mapModal = document.getElementById("map-modal");
+      const mapDialog = mapModal?.querySelector(".map-modal__dialog");
 
       let pendingUrl = "";
       let pendingTarget = "_self";
+      let mapLastFocusedElement = null;
 
       function isUnlocked() {
         return sessionStorage.getItem(UNLOCK_KEY) === "true";
@@ -665,7 +1385,78 @@
         element.addEventListener("click", closePasswordModal);
       });
 
+      function getMapFocusableElements() {
+        if (!mapDialog) {
+          return [];
+        }
+
+        return Array.from(
+          mapDialog.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((element) => !element.hasAttribute("disabled") && element.offsetParent !== null);
+      }
+
+      function openMapModal() {
+        if (!mapModal || !mapDialog) {
+          return;
+        }
+
+        mapLastFocusedElement = document.activeElement;
+        mapModal.hidden = false;
+        document.body.classList.add("map-modal-open");
+
+        const focusable = getMapFocusableElements();
+        (focusable[0] || mapDialog).focus();
+      }
+
+      function closeMapModal() {
+        if (!mapModal) {
+          return;
+        }
+
+        mapModal.hidden = true;
+        document.body.classList.remove("map-modal-open");
+
+        if (mapLastFocusedElement && typeof mapLastFocusedElement.focus === "function") {
+          mapLastFocusedElement.focus();
+        }
+      }
+
+      mapOpenButton?.addEventListener("click", openMapModal);
+
+      document.querySelectorAll("[data-close-map-modal]").forEach((element) => {
+        element.addEventListener("click", closeMapModal);
+      });
+
+      mapModal?.addEventListener("keydown", (event) => {
+        if (event.key !== "Tab" || mapModal.hidden) {
+          return;
+        }
+
+        const focusable = getMapFocusableElements();
+        if (!focusable.length) {
+          return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+
       document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && mapModal && !mapModal.hidden) {
+          closeMapModal();
+          return;
+        }
+
         if (event.key === "Escape" && !passwordModal.hidden) {
           closePasswordModal();
         }
