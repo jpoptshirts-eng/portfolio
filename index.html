@@ -819,11 +819,11 @@
 
         <div class="utility-link">
           <button
-            class="map-link audio-toggle is-muted"
+            class="map-link audio-toggle"
             type="button"
             id="audio-toggle"
-            aria-label="Turn background audio on"
-            aria-pressed="true"
+            aria-label="Turn background audio off"
+            aria-pressed="false"
           >
             <svg class="map-link__icon audio-icon audio-icon--on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
@@ -959,7 +959,7 @@
     <script>
       const backgroundVideo = document.getElementById("background-video");
       const audioToggle = document.getElementById("audio-toggle");
-      let isBackgroundAudioMuted = true;
+      let isBackgroundAudioMuted = false;
 
       function updateAudioToggleUi() {
         if (!audioToggle) {
@@ -976,20 +976,56 @@
 
       function playBackgroundVideo() {
         if (!backgroundVideo) {
+          return Promise.resolve();
+        }
+
+        return backgroundVideo.play().catch(() => {});
+      }
+
+      function applyBackgroundAudioPreference() {
+        if (!backgroundVideo) {
           return;
         }
 
-        backgroundVideo.play().catch(() => {});
+        backgroundVideo.muted = isBackgroundAudioMuted;
+      }
+
+      function unlockBackgroundAudio() {
+        if (!backgroundVideo || isBackgroundAudioMuted) {
+          return;
+        }
+
+        backgroundVideo.muted = false;
+        playBackgroundVideo();
+      }
+
+      function startBackgroundVideo() {
+        if (!backgroundVideo) {
+          return;
+        }
+
+        backgroundVideo.volume = 0.85;
+        applyBackgroundAudioPreference();
+
+        playBackgroundVideo().catch(() => {
+          if (isBackgroundAudioMuted) {
+            return;
+          }
+
+          backgroundVideo.muted = true;
+          playBackgroundVideo();
+        });
       }
 
       if (backgroundVideo) {
-        backgroundVideo.volume = 0.85;
-        backgroundVideo.muted = isBackgroundAudioMuted;
-        playBackgroundVideo();
-        backgroundVideo.addEventListener("loadeddata", playBackgroundVideo);
+        startBackgroundVideo();
+        backgroundVideo.addEventListener("loadeddata", startBackgroundVideo);
       }
 
       updateAudioToggleUi();
+
+      document.addEventListener("pointerdown", unlockBackgroundAudio, { once: true });
+      document.addEventListener("keydown", unlockBackgroundAudio, { once: true });
 
       audioToggle?.addEventListener("click", () => {
         if (!backgroundVideo) {
@@ -997,7 +1033,7 @@
         }
 
         isBackgroundAudioMuted = !isBackgroundAudioMuted;
-        backgroundVideo.muted = isBackgroundAudioMuted;
+        applyBackgroundAudioPreference();
         updateAudioToggleUi();
 
         if (!isBackgroundAudioMuted) {
