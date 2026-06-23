@@ -218,6 +218,8 @@
         margin: 0 auto 2.2rem;
         display: flex;
         justify-content: center;
+        align-items: center;
+        gap: 0.35rem;
       }
 
       .map-link {
@@ -246,6 +248,18 @@
         width: 1rem;
         height: 1rem;
         flex-shrink: 0;
+      }
+
+      .audio-toggle .audio-icon--off {
+        display: none;
+      }
+
+      .audio-toggle.is-muted .audio-icon--on {
+        display: none;
+      }
+
+      .audio-toggle.is-muted .audio-icon--off {
+        display: block;
       }
 
       .map-modal {
@@ -802,6 +816,42 @@
         </section>
 
         <div class="utility-link">
+          <button
+            class="map-link audio-toggle"
+            type="button"
+            id="audio-toggle"
+            aria-label="Turn background audio off"
+            aria-pressed="false"
+          >
+            <svg class="map-link__icon audio-icon audio-icon--on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M11 5 6 9H3v6h3l5 4V5Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M15.54 8.46a5 5 0 0 1 0 7.07M18.63 5.37a9 9 0 0 1 0 12.73"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+            <svg class="map-link__icon audio-icon audio-icon--off" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M11 5 6 9H3v6h3l5 4V5Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="m22 9-6 6M16 9l6 6"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
           <button class="map-link" type="button" id="map-open" aria-haspopup="dialog">
             <svg class="map-link__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
@@ -906,17 +956,59 @@
 
     <script>
       const backgroundVideo = document.getElementById("background-video");
+      const audioToggle = document.getElementById("audio-toggle");
+      let isBackgroundAudioMuted = false;
+
+      function updateAudioToggleUi() {
+        if (!audioToggle) {
+          return;
+        }
+
+        audioToggle.classList.toggle("is-muted", isBackgroundAudioMuted);
+        audioToggle.setAttribute("aria-pressed", String(isBackgroundAudioMuted));
+        audioToggle.setAttribute(
+          "aria-label",
+          isBackgroundAudioMuted ? "Turn background audio on" : "Turn background audio off"
+        );
+      }
+
+      function playBackgroundVideo() {
+        if (!backgroundVideo) {
+          return;
+        }
+
+        backgroundVideo.play().catch(() => {});
+      }
+
       if (backgroundVideo) {
         backgroundVideo.volume = 0.85;
-
-        const playBackgroundVideo = () => {
-          backgroundVideo.play().catch(() => {});
-        };
-
+        backgroundVideo.muted = false;
         playBackgroundVideo();
-        document.addEventListener("pointerdown", playBackgroundVideo, { once: true });
-        document.addEventListener("keydown", playBackgroundVideo, { once: true });
       }
+
+      updateAudioToggleUi();
+
+      audioToggle?.addEventListener("click", () => {
+        if (!backgroundVideo) {
+          return;
+        }
+
+        isBackgroundAudioMuted = !isBackgroundAudioMuted;
+        backgroundVideo.muted = isBackgroundAudioMuted;
+        updateAudioToggleUi();
+
+        if (!isBackgroundAudioMuted) {
+          playBackgroundVideo();
+        }
+      });
+
+      document.addEventListener(
+        "pointerdown",
+        () => {
+          playBackgroundVideo();
+        },
+        { once: true }
+      );
 
       const MAP_STOPS = {
         shoppingLists: {
