@@ -819,11 +819,11 @@
 
         <div class="utility-link">
           <button
-            class="map-link audio-toggle"
+            class="map-link audio-toggle is-muted"
             type="button"
             id="audio-toggle"
-            aria-label="Turn background audio off"
-            aria-pressed="false"
+            aria-label="Turn background audio on"
+            aria-pressed="true"
           >
             <svg class="map-link__icon audio-icon audio-icon--on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
@@ -959,7 +959,7 @@
     <script>
       const backgroundVideo = document.getElementById("background-video");
       const audioToggle = document.getElementById("audio-toggle");
-      let isBackgroundAudioMuted = false;
+      let isBackgroundAudioMuted = true;
 
       function updateAudioToggleUi() {
         if (!audioToggle) {
@@ -974,58 +974,38 @@
         );
       }
 
-      function playBackgroundVideo() {
-        if (!backgroundVideo) {
-          return Promise.resolve();
-        }
-
-        return backgroundVideo.play().catch(() => {});
-      }
-
-      function applyBackgroundAudioPreference() {
-        if (!backgroundVideo) {
-          return;
-        }
-
-        backgroundVideo.muted = isBackgroundAudioMuted;
-      }
-
-      function unlockBackgroundAudio() {
-        if (!backgroundVideo || isBackgroundAudioMuted) {
-          return;
-        }
-
-        backgroundVideo.muted = false;
-        playBackgroundVideo();
-      }
-
-      function startBackgroundVideo() {
+      function syncBackgroundVideoAudio() {
         if (!backgroundVideo) {
           return;
         }
 
         backgroundVideo.volume = 0.85;
-        applyBackgroundAudioPreference();
+        backgroundVideo.muted = isBackgroundAudioMuted;
+      }
 
-        playBackgroundVideo().catch(() => {
-          if (isBackgroundAudioMuted) {
-            return;
-          }
+      async function startBackgroundMedia() {
+        if (!backgroundVideo || !backgroundVideo.paused) {
+          return;
+        }
 
-          backgroundVideo.muted = true;
-          playBackgroundVideo();
-        });
+        backgroundVideo.volume = 0.85;
+        backgroundVideo.muted = true;
+
+        try {
+          await backgroundVideo.play();
+        } catch {
+          // Ignore playback errors.
+        }
       }
 
       if (backgroundVideo) {
-        startBackgroundVideo();
-        backgroundVideo.addEventListener("loadeddata", startBackgroundVideo);
+        syncBackgroundVideoAudio();
+        startBackgroundMedia();
+        backgroundVideo.addEventListener("loadeddata", startBackgroundMedia);
+        backgroundVideo.addEventListener("canplay", startBackgroundMedia);
       }
 
       updateAudioToggleUi();
-
-      document.addEventListener("pointerdown", unlockBackgroundAudio, { once: true });
-      document.addEventListener("keydown", unlockBackgroundAudio, { once: true });
 
       audioToggle?.addEventListener("click", () => {
         if (!backgroundVideo) {
@@ -1033,12 +1013,9 @@
         }
 
         isBackgroundAudioMuted = !isBackgroundAudioMuted;
-        applyBackgroundAudioPreference();
+        syncBackgroundVideoAudio();
         updateAudioToggleUi();
-
-        if (!isBackgroundAudioMuted) {
-          playBackgroundVideo();
-        }
+        backgroundVideo.play().catch(() => {});
       });
 
       const MAP_STOPS = {
