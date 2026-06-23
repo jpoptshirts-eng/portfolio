@@ -720,8 +720,10 @@
         class="background-video"
         id="background-video"
         autoplay
+        muted
         loop
         playsinline
+        preload="auto"
         aria-hidden="true"
       >
         <source src="./Assets/subway_train_motion.mp4" type="video/mp4" />
@@ -817,11 +819,11 @@
 
         <div class="utility-link">
           <button
-            class="map-link audio-toggle"
+            class="map-link audio-toggle is-muted"
             type="button"
             id="audio-toggle"
-            aria-label="Turn background audio off"
-            aria-pressed="false"
+            aria-label="Turn background audio on"
+            aria-pressed="true"
           >
             <svg class="map-link__icon audio-icon audio-icon--on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
@@ -957,7 +959,7 @@
     <script>
       const backgroundVideo = document.getElementById("background-video");
       const audioToggle = document.getElementById("audio-toggle");
-      let isBackgroundAudioMuted = false;
+      let isBackgroundAudioMuted = true;
 
       function updateAudioToggleUi() {
         if (!audioToggle) {
@@ -982,8 +984,9 @@
 
       if (backgroundVideo) {
         backgroundVideo.volume = 0.85;
-        backgroundVideo.muted = false;
+        backgroundVideo.muted = isBackgroundAudioMuted;
         playBackgroundVideo();
+        backgroundVideo.addEventListener("loadeddata", playBackgroundVideo);
       }
 
       updateAudioToggleUi();
@@ -1001,14 +1004,6 @@
           playBackgroundVideo();
         }
       });
-
-      document.addEventListener(
-        "pointerdown",
-        () => {
-          playBackgroundVideo();
-        },
-        { once: true }
-      );
 
       const MAP_STOPS = {
         shoppingLists: {
