@@ -36,67 +36,35 @@
         background: #020a16;
       }
 
+      html {
+        scroll-snap-type: y mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overscroll-behavior-y: none;
+      }
+
+      html::-webkit-scrollbar {
+        display: none;
+      }
+
+      body {
+        scroll-snap-type: y mandatory;
+      }
+
       .page {
         position: relative;
         overflow-x: hidden;
       }
 
-      .scene {
-        position: relative;
-        isolation: isolate;
-      }
-
-      .underground-descent {
-        position: relative;
-        z-index: 5;
-        width: 100%;
-        height: clamp(260px, 36vh, 460px);
-        overflow: hidden;
-        background: #000000;
-        flex-shrink: 0;
-      }
-
-      .underground-descent__frame {
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
-
-      .underground-descent__image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center 0%;
-        display: block;
-        transform: scale(1.08);
-        transform-origin: center center;
-      }
-
-      .underground-descent__shade {
-        position: absolute;
+      .experience__bg {
+        position: fixed;
         inset: 0;
-        pointer-events: none;
-      }
-
-      .underground-descent__shade--top {
-        background: linear-gradient(to bottom, #000000 0%, rgba(0, 0, 0, 0.72) 28%, transparent 100%);
-      }
-
-      .underground-descent__shade--bottom {
-        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.78) 62%, #000000 100%);
-      }
-
-      .scene__media {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        width: 100%;
         z-index: 0;
         overflow: hidden;
         pointer-events: none;
       }
 
-      .scene__video {
+      .experience__video {
         position: absolute;
         inset: 0;
         width: 100%;
@@ -104,34 +72,171 @@
         object-fit: cover;
       }
 
-      .scene__overlay {
+      .experience__overlay {
         position: absolute;
         inset: 0;
-        z-index: 1;
-      }
-
-      .scene__overlay--surface {
         background:
           linear-gradient(to bottom, rgba(12, 26, 48, 0.1), rgba(2, 10, 20, 0.62)),
           radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), rgba(2, 10, 20, 0.55));
       }
 
-      .scene--tunnel .scene__video {
-        transform: translateZ(0);
+      .experience__stage {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5.5rem 0 4.5rem;
+        pointer-events: none;
       }
 
-      .scene__content {
+      .snap-page {
+        height: 100dvh;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      .content-panels {
         position: relative;
+        width: min(1200px, 92vw);
+        margin: 0 auto;
+        min-height: min(78vh, 720px);
+        pointer-events: auto;
+      }
+
+      .work-section {
+        width: 100%;
+      }
+
+      .work-section .tools-section__title {
+        margin-bottom: 1.35rem;
+      }
+
+      .content-panel {
+        position: absolute;
+        inset: 0;
         z-index: 1;
-        margin-top: -100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(28px);
+        pointer-events: none;
+        will-change: opacity, transform;
       }
 
-      .scene--surface .scene__content {
-        min-height: 100vh;
+      .content-panel.is-active {
+        z-index: 2;
+        pointer-events: auto;
       }
 
-      .scene--tunnel .scene__content {
-        min-height: 100vh;
+      .content-panel.is-animating {
+        transition:
+          opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+          visibility 0s linear 0s;
+      }
+
+      .content-panel.is-animating:not(.is-active) {
+        transition:
+          opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+          visibility 0s linear 0.65s;
+      }
+
+      .panel-nav {
+        position: fixed;
+        right: clamp(1rem, 3vw, 2.5rem);
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.7rem;
+      }
+
+      .panel-nav__line {
+        width: 2.4rem;
+        height: 2px;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(248, 251, 255, 0.34);
+        cursor: pointer;
+        transition: width 220ms ease, background 220ms ease, opacity 220ms ease;
+      }
+
+      .panel-nav__line:hover,
+      .panel-nav__line:focus-visible {
+        background: rgba(248, 251, 255, 0.72);
+        outline: none;
+      }
+
+      .panel-nav__line.is-active {
+        width: 3.4rem;
+        background: #ffffff;
+      }
+
+      .work-grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.85rem;
+        text-align: left;
+      }
+
+      .work-card {
+        border: 1px solid #ffffff;
+        border-radius: 12px;
+        background: transparent;
+        padding: 1rem 1.05rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        min-height: 9.5rem;
+      }
+
+      .work-card--span-2 {
+        grid-column: span 2;
+      }
+
+      .work-card__title {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffffff;
+        line-height: 1.25;
+      }
+
+      .work-card__desc {
+        font-size: 0.82rem;
+        font-weight: 300;
+        line-height: 1.5;
+        color: rgba(248, 251, 255, 0.78);
+        flex: 1;
+      }
+
+      .work-card__link {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #ffffff;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        width: fit-content;
+      }
+
+      .work-card__link:hover,
+      .work-card__link:focus-visible {
+        opacity: 0.72;
+        outline: none;
       }
 
       .shell {
@@ -139,25 +244,13 @@
         margin: 0 auto;
       }
 
-      .shell--surface {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .shell--tunnel {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 4rem 0 2.2rem;
-      }
-
       .top-nav {
-        position: sticky;
+        position: fixed;
         top: 1rem;
-        z-index: 20;
-        margin: 1rem auto 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 30;
+        margin: 0;
         width: fit-content;
         max-width: 100%;
         border: 1px solid var(--glass-border);
@@ -221,24 +314,11 @@
       }
 
       .hero {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 4rem 0 1.5rem;
-        min-height: calc(100vh - 5rem);
-      }
-
-      .hero__body {
-        flex: 1;
-        display: grid;
-        place-items: center;
         width: 100%;
       }
 
       .tools-section {
-        padding: 2rem 0 3rem;
+        width: 100%;
         text-align: center;
       }
 
@@ -393,13 +473,17 @@
       }
 
       .utility-link {
-        width: 100%;
-        margin: auto auto 0;
+        position: fixed;
+        left: 50%;
+        bottom: 1.35rem;
+        transform: translateX(-50%);
+        z-index: 30;
+        width: fit-content;
+        margin: 0;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 0.35rem;
-        flex-shrink: 0;
       }
 
       .map-link {
@@ -836,18 +920,38 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .scene__video {
-          scroll-behavior: auto;
+        html {
+          scroll-snap-type: none;
         }
 
-        .underground-descent__image {
-          transform: none;
+        .content-panel.is-animating {
+          transition: none;
+        }
+
+        .panel-nav__line {
+          transition: none;
+        }
+
+        .snap-page {
+          scroll-snap-stop: normal;
         }
       }
 
       @media (max-width: 900px) {
         .tool-item {
           width: 4.25rem;
+        }
+
+        .work-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .work-card--span-2 {
+          grid-column: span 1;
+        }
+
+        .panel-nav {
+          right: 0.85rem;
         }
       }
 
@@ -880,7 +984,7 @@
           width: min(100%, 520px);
           border-radius: 18px;
           padding: 0.5rem;
-          margin-top: 0.75rem;
+          top: 0.75rem;
         }
 
         .nav-toggle {
@@ -911,23 +1015,21 @@
   </head>
   <body>
     <main class="page">
-      <section class="scene scene--surface">
-        <div class="scene__media" aria-hidden="true">
-          <video
-            class="scene__video"
-            id="background-video"
-            autoplay
-            muted
-            playsinline
-            preload="auto"
-          >
-            <source src="./Assets/Underground_loop.mp4?v=4" type="video/mp4" />
-          </video>
-          <div class="scene__overlay scene__overlay--surface"></div>
-        </div>
-        <div class="scene__content">
-          <div class="shell shell--surface">
-        <header class="top-nav">
+      <div class="experience__bg" aria-hidden="true">
+        <video
+          class="experience__video"
+          id="background-video"
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+        >
+          <source src="./Assets/Underground_loop.mp4?v=4" type="video/mp4" />
+        </video>
+        <div class="experience__overlay"></div>
+      </div>
+
+      <header class="top-nav">
           <button
             class="nav-toggle"
             type="button"
@@ -990,31 +1092,13 @@
           </nav>
         </header>
 
-        <section class="hero">
-          <div class="hero__body">
-            <div>
-            <h1>
-              Turning complex behaviour into simple, measurable product experiences.
-            </h1>
-            <p>
-              I’m Jac, a Senior Product Designer with 15+ years across fintech, grocery and edtech,
-              specialising in complex digital products that connect customer behaviour, technology and
-              commercial outcomes.
-            </p>
-            <div class="hero-actions">
-              <a
-                class="btn btn-primary protected-link"
-                href="https://www.jacinto.website/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                View portfolio website
-              </a>
-            </div>
-            </div>
-          </div>
+      <nav class="panel-nav" aria-label="Section navigation">
+        <button type="button" class="panel-nav__line is-active" data-panel="0" aria-label="Introduction" aria-current="true"></button>
+        <button type="button" class="panel-nav__line" data-panel="1" aria-label="Toolkit"></button>
+        <button type="button" class="panel-nav__line" data-panel="2" aria-label="Case studies"></button>
+      </nav>
 
-          <div class="utility-link">
+      <div class="utility-link">
             <button
               class="map-link audio-toggle is-muted"
               type="button"
@@ -1069,52 +1153,42 @@
               Map
             </button>
           </div>
-        </section>
-          </div>
-        </div>
-      </section>
 
-      <section class="underground-descent" aria-hidden="true">
-        <div class="underground-descent__frame">
-          <img
-            class="underground-descent__image"
-            src="./Assets/underground-soil-strata.png"
-            alt=""
-            width="1920"
-            height="820"
-            loading="lazy"
-            decoding="async"
-          />
-          <div class="underground-descent__shade underground-descent__shade--top"></div>
-          <div class="underground-descent__shade underground-descent__shade--bottom"></div>
-        </div>
-      </section>
+      <div class="experience__stage">
+        <div class="content-panels">
+            <div class="content-panel is-active" data-panel="0" id="panel-hero">
+              <section class="hero">
+                <h1>
+                  Turning complex behaviour into simple, measurable product experiences.
+                </h1>
+                <p>
+                  I’m Jac, a Senior Product Designer with 15+ years across fintech, grocery and edtech,
+                  specialising in complex digital products that connect customer behaviour, technology and
+                  commercial outcomes.
+                </p>
+                <div class="hero-actions">
+                  <a
+                    class="btn btn-primary protected-link"
+                    href="https://www.jacinto.website/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View portfolio website
+                  </a>
+                </div>
+              </section>
+            </div>
 
-      <section class="scene scene--tunnel">
-        <div class="scene__media" aria-hidden="true">
-          <video
-            class="scene__video"
-            id="tunnel-video"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-          >
-            <source src="./Assets/Undeground_tunnel.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="scene__content">
-          <div class="shell shell--tunnel">
-        <section class="tools-section" aria-labelledby="tools-title">
-          <p class="tools-section__eyebrow">Toolkit</p>
-          <h2 class="tools-section__title" id="tools-title">Design, AI and delivery stack</h2>
-          <p class="tools-section__desc">
-            Tools I use across product strategy, rapid prototyping, native mobile, regulated fintech
-            and AI-assisted delivery — from research and systems thinking through to shipped
-            experiences.
-          </p>
-          <ul class="tools-grid">
+            <div class="content-panel" data-panel="1" id="panel-toolkit">
+              <section class="tools-section" aria-labelledby="tools-title">
+                <p class="tools-section__eyebrow">Toolkit</p>
+                <h2 class="tools-section__title" id="tools-title">Design, AI and delivery stack</h2>
+                <p class="tools-section__desc">
+                  Tools I use across product strategy, rapid prototyping, native mobile, regulated fintech
+                  and AI-assisted delivery — from research and systems thinking through to shipped
+                  experiences.
+                </p>
+                <ul class="tools-grid">
             <li class="tool-item">
               <img class="tool-item__icon" src="https://cdn.simpleicons.org/figma/FFFFFF" alt="" width="32" height="32" loading="lazy" />
               <span class="tool-item__label">Figma</span>
@@ -1191,10 +1265,54 @@
               <span class="tool-item__label">iOS & Android</span>
             </li>
           </ul>
-        </section>
+              </section>
+            </div>
+
+            <div class="content-panel" data-panel="2" id="panel-work">
+              <section class="work-section" aria-labelledby="work-title">
+                <p class="tools-section__eyebrow">Case studies</p>
+                <h2 class="tools-section__title" id="work-title">Selected work</h2>
+                
+            <div class="work-grid">
+              <article class="work-card work-card--span-2">
+                <h3 class="work-card__title">Shopping Lists</h3>
+                <p class="work-card__desc">AI-assisted shopping lists that understand intent, adapt in real time and drive more basket value.</p>
+                <a class="work-card__link protected-link" href="https://www.figma.com/deck/7tZvvjMAGYWm2TyfyCSe6n" target="_blank" rel="noreferrer">View case study</a>
+              </article>
+              <article class="work-card work-card--span-2">
+                <h3 class="work-card__title">Quick Shop</h3>
+                <p class="work-card__desc">Smart recommendations at the right moment to make shopping faster, easier and more relevant.</p>
+                <a class="work-card__link protected-link" href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko" target="_blank" rel="noreferrer">View case study</a>
+              </article>
+              <article class="work-card">
+                <h3 class="work-card__title">Cellar</h3>
+                <p class="work-card__desc">Redefining account strategy and onboarding to reduce delivery effort by over 50% while accelerating customer value.</p>
+                <a class="work-card__link protected-link" href="https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr" target="_blank" rel="noreferrer">View case study</a>
+              </article>
+              <article class="work-card">
+                <h3 class="work-card__title">PrimaryBid</h3>
+                <p class="work-card__desc">Simplifying complex IPO investment workflows for trust, clarity and confidence at every step.</p>
+                <a class="work-card__link protected-link" href="https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc" target="_blank" rel="noreferrer">View case study</a>
+              </article>
+              <article class="work-card">
+                <h3 class="work-card__title">Kaizen Languages</h3>
+                <p class="work-card__desc">iOS and Android AI language learning that adapts to motivation, ability and real-life progress.</p>
+                <a class="work-card__link protected-link" href="https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12" target="_blank" rel="noreferrer">View case study</a>
+              </article>
+              <article class="work-card">
+                <h3 class="work-card__title">Smarter</h3>
+                <p class="work-card__desc">Designing one connected app for the iKettle, Smarter Coffee and FridgeCam across a smart kitchen ecosystem.</p>
+                <a class="work-card__link protected-link" href="https://www.jacinto.website/#work" target="_blank" rel="noreferrer">View case study</a>
+              </article>
+            </div>
+              </section>
+            </div>
           </div>
         </div>
-      </section>
+
+      <div class="snap-page" data-panel="0" aria-hidden="true"></div>
+      <div class="snap-page" data-panel="1" aria-hidden="true"></div>
+      <div class="snap-page" data-panel="2" aria-hidden="true"></div>
     </main>
 
     <div
@@ -1280,37 +1398,163 @@
 
     <script>
       const backgroundVideo = document.getElementById("background-video");
-      const tunnelVideo = document.getElementById("tunnel-video");
       const audioToggle = document.getElementById("audio-toggle");
+      const contentPanels = Array.from(document.querySelectorAll(".content-panel"));
+      const panelNavLines = Array.from(document.querySelectorAll(".panel-nav__line"));
+      const SNAP_COUNT = 3;
       let isBackgroundAudioMuted = true;
+      let menuPanel = null;
+      let isProgrammaticScroll = false;
+      let scrollEndTimer = null;
 
-      function setupTunnelVideoLoop(video) {
+      function getPageHeight() {
+        const snapPage = document.querySelector(".snap-page");
+        return snapPage?.offsetHeight || window.innerHeight || 1;
+      }
+
+      function getSnappedPanelIndex() {
+        const pageHeight = getPageHeight();
+        const raw = window.scrollY / pageHeight;
+        return Math.min(SNAP_COUNT - 1, Math.max(0, Math.round(raw)));
+      }
+
+      function setPanelVisual(panel, opacity, translateY, animate) {
+        if (!panel) {
+          return;
+        }
+
+        const isVisible = opacity > 0.001;
+        panel.classList.toggle("is-animating", animate);
+        panel.style.opacity = isVisible ? String(opacity) : "0";
+        panel.style.visibility = isVisible ? "visible" : "hidden";
+        panel.style.transform = `translateY(${translateY}px)`;
+        panel.style.zIndex = isVisible && opacity >= 0.5 ? "2" : "1";
+        panel.classList.toggle("is-active", isVisible && opacity >= 0.5);
+      }
+
+      function showPanelExclusive(activeIndex, animate = false) {
+        contentPanels.forEach((panel) => {
+          const panelIndex = Number(panel.dataset.panel);
+          setPanelVisual(panel, panelIndex === activeIndex ? 1 : 0, 0, animate);
+        });
+        updatePanelNav(activeIndex);
+      }
+
+      function updatePanelsFromScroll(animate = false) {
+        if (menuPanel !== null) {
+          showPanelExclusive(menuPanel, animate);
+          return;
+        }
+
+        const pageHeight = getPageHeight();
+        const raw = window.scrollY / pageHeight;
+        const from = Math.min(SNAP_COUNT - 1, Math.max(0, Math.floor(raw)));
+        const to = Math.min(SNAP_COUNT - 1, from + 1);
+        const blend = raw - from;
+
+        contentPanels.forEach((panel) => {
+          const panelIndex = Number(panel.dataset.panel);
+
+          if (panelIndex < from || panelIndex > to) {
+            setPanelVisual(panel, 0, 0, false);
+            return;
+          }
+
+          if (from === to) {
+            setPanelVisual(panel, panelIndex === from ? 1 : 0, 0, animate);
+            return;
+          }
+
+          if (panelIndex === from) {
+            setPanelVisual(panel, 1 - blend, -22 * blend, animate);
+            return;
+          }
+
+          setPanelVisual(panel, blend, 22 * (1 - blend), animate);
+        });
+
+        updatePanelNav(blend < 0.5 ? from : to);
+      }
+
+      function updatePanelNav(activeIndex) {
+        panelNavLines.forEach((line) => {
+          const index = Number(line.dataset.panel);
+          const isActive = index === activeIndex;
+          line.classList.toggle("is-active", isActive);
+          line.setAttribute("aria-current", isActive ? "true" : "false");
+        });
+      }
+
+      function alignScrollToPanel(panelIndex) {
+        const targetTop = panelIndex * getPageHeight();
+        if (Math.abs(window.scrollY - targetTop) <= 1) {
+          return;
+        }
+
+        isProgrammaticScroll = true;
+        window.scrollTo({ top: targetTop, behavior: "auto" });
+        requestAnimationFrame(() => {
+          isProgrammaticScroll = false;
+        });
+      }
+
+      function settlePanels(animate = true) {
+        const snapped = getSnappedPanelIndex();
+        alignScrollToPanel(snapped);
+        showPanelExclusive(snapped, animate);
+      }
+
+      function scrollToPanel(panelIndex, animatePanels = true) {
+        const targetTop = panelIndex * getPageHeight();
+
+        isProgrammaticScroll = true;
+        window.scrollTo({ top: targetTop, behavior: "smooth" });
+
+        window.setTimeout(() => {
+          isProgrammaticScroll = false;
+          menuPanel = null;
+          settlePanels(animatePanels);
+        }, 680);
+      }
+
+      panelNavLines.forEach((line) => {
+        line.addEventListener("click", () => {
+          scrollToPanel(Number(line.dataset.panel), true);
+        });
+      });
+
+      function onScroll() {
+        if (!isProgrammaticScroll) {
+          menuPanel = null;
+        }
+
+        updatePanelsFromScroll(false);
+
+        if (isProgrammaticScroll) {
+          return;
+        }
+
+        window.clearTimeout(scrollEndTimer);
+        scrollEndTimer = window.setTimeout(() => settlePanels(true), 90);
+      }
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      if ("onscrollend" in window) {
+        window.addEventListener("scrollend", () => settlePanels(true));
+      }
+
+      window.addEventListener("resize", () => {
+        settlePanels(false);
+      });
+
+      showPanelExclusive(0, false);
+
+      function setupBackgroundVideoLoop(video) {
         video.addEventListener("ended", () => {
           video.currentTime = 0;
           video.play().catch(() => {});
         });
-      }
-
-      const undergroundDescent = document.querySelector(".underground-descent");
-      const undergroundDescentImage = document.querySelector(".underground-descent__image");
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      function updateUndergroundDescent() {
-        if (!undergroundDescent || !undergroundDescentImage || prefersReducedMotion) {
-          return;
-        }
-
-        const rect = undergroundDescent.getBoundingClientRect();
-        const viewport = window.innerHeight;
-        const progress = Math.min(1, Math.max(0, 1 - rect.bottom / (viewport + rect.height * 0.35)));
-
-        undergroundDescentImage.style.objectPosition = `center ${progress * 100}%`;
-      }
-
-      if (undergroundDescent && undergroundDescentImage && !prefersReducedMotion) {
-        updateUndergroundDescent();
-        window.addEventListener("scroll", updateUndergroundDescent, { passive: true });
-        window.addEventListener("resize", updateUndergroundDescent);
       }
 
       function updateAudioToggleUi() {
@@ -1350,42 +1594,12 @@
         }
       }
 
-      function setupBackgroundVideoLoop(video) {
-        video.addEventListener("ended", () => {
-          video.currentTime = 0;
-          video.play().catch(() => {});
-        });
-      }
-
       if (backgroundVideo) {
         setupBackgroundVideoLoop(backgroundVideo);
         syncBackgroundVideoAudio();
         startBackgroundMedia();
         backgroundVideo.addEventListener("loadeddata", startBackgroundMedia);
         backgroundVideo.addEventListener("canplay", startBackgroundMedia);
-      }
-
-      if (tunnelVideo) {
-        tunnelVideo.volume = 0;
-        tunnelVideo.muted = true;
-        setupTunnelVideoLoop(tunnelVideo);
-
-        const tunnelScene = document.querySelector(".scene--tunnel");
-        if (tunnelScene) {
-          const tunnelObserver = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                  tunnelVideo.play().catch(() => {});
-                } else {
-                  tunnelVideo.pause();
-                }
-              });
-            },
-            { threshold: 0.12 }
-          );
-          tunnelObserver.observe(tunnelScene);
-        }
       }
 
       updateAudioToggleUi();
