@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -46,6 +46,46 @@
         isolation: isolate;
       }
 
+      .underground-descent {
+        position: relative;
+        z-index: 5;
+        width: 100%;
+        height: clamp(260px, 36vh, 460px);
+        overflow: hidden;
+        background: #000000;
+        flex-shrink: 0;
+      }
+
+      .underground-descent__frame {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .underground-descent__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 0%;
+        display: block;
+        transform: scale(1.08);
+        transform-origin: center center;
+      }
+
+      .underground-descent__shade {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .underground-descent__shade--top {
+        background: linear-gradient(to bottom, #000000 0%, rgba(0, 0, 0, 0.72) 28%, transparent 100%);
+      }
+
+      .underground-descent__shade--bottom {
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.78) 62%, #000000 100%);
+      }
+
       .scene__media {
         position: sticky;
         top: 0;
@@ -76,10 +116,8 @@
           radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), rgba(2, 10, 20, 0.55));
       }
 
-      .scene__overlay--tunnel {
-        background:
-          linear-gradient(to bottom, rgba(8, 14, 24, 0.35), rgba(2, 6, 12, 0.82)),
-          radial-gradient(circle at 50% 20%, rgba(90, 70, 40, 0.12), rgba(0, 0, 0, 0.65));
+      .scene--tunnel .scene__video {
+        transform: translateZ(0);
       }
 
       .scene__content {
@@ -205,26 +243,33 @@
       }
 
       .tools-section__eyebrow {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
         font-size: 0.78rem;
-        letter-spacing: 0.14em;
+        font-weight: 500;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
         color: rgba(248, 251, 255, 0.58);
         margin-bottom: 0.75rem;
       }
 
       .tools-section__title {
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+        font-style: normal;
         font-weight: 500;
-        font-size: clamp(1.85rem, 4.5vw, 2.75rem);
-        line-height: 1.05;
+        font-size: 40px;
+        line-height: 1.3;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        text-wrap: balance;
+        text-shadow: 0 8px 35px rgba(0, 0, 0, 0.26);
         margin-bottom: 0.85rem;
       }
 
       .tools-section__desc {
-        max-width: 58ch;
+        max-width: 62ch;
         color: var(--muted);
-        font-size: 0.98rem;
+        font-size: clamp(0.92rem, 2.1vw, 1.05rem);
+        font-weight: 300;
         line-height: 1.6;
         margin: 0 auto 2rem;
       }
@@ -234,8 +279,8 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 1.35rem 1.1rem;
-        max-width: min(34rem, 100%);
+        gap: 1.35rem 1rem;
+        max-width: min(38rem, 100%);
         margin: 0 auto;
       }
 
@@ -255,26 +300,41 @@
         display: block;
       }
 
-      .tool-item__icon--cursor {
-        width: 2.2rem;
+      .tool-item__icon--brand {
         border-radius: 6px;
       }
 
+      .tool-item__icon-pair {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        min-height: 2rem;
+      }
+
+      .tool-item__icon-pair .tool-item__icon {
+        width: 1.55rem;
+        height: 1.55rem;
+      }
+
       .tool-item__label {
-        font-size: 0.82rem;
+        font-size: 0.78rem;
         font-weight: 500;
         color: rgba(248, 251, 255, 0.88);
         letter-spacing: 0.01em;
+        line-height: 1.25;
+        max-width: 5.4rem;
       }
 
       .hero h1 {
         margin-top: 0;
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+        font-style: normal;
         font-weight: 500;
-        font-size: clamp(2.25rem, 8.5vw, 5.8rem);
-        line-height: 0.93;
-        letter-spacing: 0.01em;
+        font-size: 40px;
+        line-height: 1.3;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
         text-wrap: balance;
         text-shadow: 0 8px 35px rgba(0, 0, 0, 0.26);
       }
@@ -285,6 +345,7 @@
         max-width: 62ch;
         color: var(--muted);
         font-size: clamp(0.92rem, 2.1vw, 1.05rem);
+        font-weight: 300;
         line-height: 1.6;
       }
 
@@ -312,7 +373,9 @@
 
       .btn-primary {
         color: #10223b;
-        background: linear-gradient(180deg, #f6fbff 0%, var(--primary) 100%);
+        background: #ffffff;
+        border-radius: 16px;
+        border-color: transparent;
       }
 
       .btn-primary:hover {
@@ -776,6 +839,10 @@
         .scene__video {
           scroll-behavior: auto;
         }
+
+        .underground-descent__image {
+          transform: none;
+        }
       }
 
       @media (max-width: 900px) {
@@ -930,8 +997,9 @@
               Turning complex behaviour into simple, measurable product experiences.
             </h1>
             <p>
-              I'm Jac, Senior Product Designer with 15+ years across fintech, grocery and edtech,
-              specialising in AI-assisted, predictive and commercially focused digital experiences.
+              I’m Jac, a Senior Product Designer with 15+ years across fintech, grocery and edtech,
+              specialising in complex digital products that connect customer behaviour, technology and
+              commercial outcomes.
             </p>
             <div class="hero-actions">
               <a
@@ -941,7 +1009,6 @@
                 rel="noreferrer"
               >
                 View portfolio website
-                <span aria-hidden="true">↗</span>
               </a>
             </div>
             </div>
@@ -1007,6 +1074,22 @@
         </div>
       </section>
 
+      <section class="underground-descent" aria-hidden="true">
+        <div class="underground-descent__frame">
+          <img
+            class="underground-descent__image"
+            src="./Assets/underground-soil-strata.png"
+            alt=""
+            width="1920"
+            height="820"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="underground-descent__shade underground-descent__shade--top"></div>
+          <div class="underground-descent__shade underground-descent__shade--bottom"></div>
+        </div>
+      </section>
+
       <section class="scene scene--tunnel">
         <div class="scene__media" aria-hidden="true">
           <video
@@ -1020,7 +1103,6 @@
           >
             <source src="./Assets/Undeground_tunnel.mp4" type="video/mp4" />
           </video>
-          <div class="scene__overlay scene__overlay--tunnel"></div>
         </div>
         <div class="scene__content">
           <div class="shell shell--tunnel">
@@ -1034,158 +1116,79 @@
           </p>
           <ul class="tools-grid">
             <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/figma/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/figma/FFFFFF" alt="" width="32" height="32" loading="lazy" />
               <span class="tool-item__label">Figma</span>
             </li>
             <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/miro/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
+              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/figma-make.svg" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Figma Make</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/miro/FFFFFF" alt="" width="32" height="32" loading="lazy" />
               <span class="tool-item__label">Miro</span>
             </li>
             <li class="tool-item">
-              <img
-                class="tool-item__icon tool-item__icon--cursor"
-                src="./Assets/cursor-logo.svg"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Cursor</span>
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/dovetail/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Dovetail</span>
             </li>
             <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/anthropic/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Claude Code</span>
-            </li>
-            <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/supabase/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Supabase</span>
-            </li>
-            <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/firebase/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Firebase</span>
-            </li>
-            <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/vercel/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Vercel</span>
-            </li>
-            <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/mixpanel/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Mixpanel</span>
-            </li>
-            <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/maze/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Maze</span>
-            </li>
-            <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/github/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">GitHub</span>
-            </li>
-            <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/notion/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/notion/FFFFFF" alt="" width="32" height="32" loading="lazy" />
               <span class="tool-item__label">Notion</span>
             </li>
             <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/jira/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/jira/FFFFFF" alt="" width="32" height="32" loading="lazy" />
               <span class="tool-item__label">Jira</span>
             </li>
             <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/apple/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">iOS / HIG</span>
+              <img class="tool-item__icon" src="./Assets/cursor-mark.svg" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Cursor</span>
             </li>
             <li class="tool-item">
-              <img
-                class="tool-item__icon"
-                src="https://cdn.simpleicons.org/android/FFFFFF"
-                alt=""
-                width="32"
-                height="32"
-                loading="lazy"
-              />
-              <span class="tool-item__label">Android</span>
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/anthropic/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Claude Code</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/relume.svg" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Relume</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/lovable.svg" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Lovable</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/uxpilot.svg" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">UX Pilot</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/supabase/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Supabase</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/googleanalytics/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Google Analytics</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/mixpanel/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Mixpanel</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/contentsquare.svg" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">Contentsquare</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/html5/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">HTML</span>
+            </li>
+            <li class="tool-item">
+              <img class="tool-item__icon" src="https://cdn.simpleicons.org/css/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <span class="tool-item__label">CSS</span>
+            </li>
+            <li class="tool-item">
+              <div class="tool-item__icon-pair" aria-hidden="true">
+                <img class="tool-item__icon" src="https://cdn.simpleicons.org/apple/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+                <img class="tool-item__icon" src="https://cdn.simpleicons.org/android/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              </div>
+              <span class="tool-item__label">iOS & Android</span>
             </li>
           </ul>
         </section>
@@ -1286,6 +1289,28 @@
           video.currentTime = 0;
           video.play().catch(() => {});
         });
+      }
+
+      const undergroundDescent = document.querySelector(".underground-descent");
+      const undergroundDescentImage = document.querySelector(".underground-descent__image");
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function updateUndergroundDescent() {
+        if (!undergroundDescent || !undergroundDescentImage || prefersReducedMotion) {
+          return;
+        }
+
+        const rect = undergroundDescent.getBoundingClientRect();
+        const viewport = window.innerHeight;
+        const progress = Math.min(1, Math.max(0, 1 - rect.bottom / (viewport + rect.height * 0.35)));
+
+        undergroundDescentImage.style.objectPosition = `center ${progress * 100}%`;
+      }
+
+      if (undergroundDescent && undergroundDescentImage && !prefersReducedMotion) {
+        updateUndergroundDescent();
+        window.addEventListener("scroll", updateUndergroundDescent, { passive: true });
+        window.addEventListener("resize", updateUndergroundDescent);
       }
 
       function updateAudioToggleUi() {
