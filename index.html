@@ -38,42 +38,81 @@
 
       .page {
         position: relative;
-        min-height: 100vh;
-        isolation: isolate;
-        overflow: hidden;
+        overflow-x: hidden;
       }
 
-      .background-video {
-        position: fixed;
+      .scene {
+        position: relative;
+        isolation: isolate;
+      }
+
+      .scene__media {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .scene__video {
+        position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        z-index: -3;
       }
 
-      .bg-fallback {
-        position: fixed;
+      .scene__overlay {
+        position: absolute;
         inset: 0;
-        z-index: -4;
-        background: radial-gradient(circle at 40% 20%, #86b4e8 0%, #3f78b0 40%, #1c3357 100%);
+        z-index: 1;
       }
 
-      .overlay {
-        position: fixed;
-        inset: 0;
-        z-index: -2;
+      .scene__overlay--surface {
         background:
           linear-gradient(to bottom, rgba(12, 26, 48, 0.1), rgba(2, 10, 20, 0.62)),
           radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), rgba(2, 10, 20, 0.55));
       }
 
+      .scene__overlay--tunnel {
+        background:
+          linear-gradient(to bottom, rgba(8, 14, 24, 0.35), rgba(2, 6, 12, 0.82)),
+          radial-gradient(circle at 50% 20%, rgba(90, 70, 40, 0.12), rgba(0, 0, 0, 0.65));
+      }
+
+      .scene__content {
+        position: relative;
+        z-index: 1;
+        margin-top: -100vh;
+      }
+
+      .scene--surface .scene__content {
+        min-height: 100vh;
+      }
+
+      .scene--tunnel .scene__content {
+        min-height: 100vh;
+      }
+
       .shell {
         width: min(1200px, 92vw);
         margin: 0 auto;
+      }
+
+      .shell--surface {
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+      }
+
+      .shell--tunnel {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem 0 2.2rem;
       }
 
       .top-nav {
@@ -145,10 +184,87 @@
 
       .hero {
         flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 4rem 0 1.5rem;
+        min-height: calc(100vh - 5rem);
+      }
+
+      .hero__body {
+        flex: 1;
         display: grid;
         place-items: center;
+        width: 100%;
+      }
+
+      .tools-section {
+        padding: 2rem 0 3rem;
         text-align: center;
-        padding: 4rem 0 2.2rem;
+      }
+
+      .tools-section__eyebrow {
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(248, 251, 255, 0.58);
+        margin-bottom: 0.75rem;
+      }
+
+      .tools-section__title {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+        line-height: 1.05;
+        margin-bottom: 0.85rem;
+      }
+
+      .tools-section__desc {
+        max-width: 58ch;
+        color: var(--muted);
+        font-size: 0.98rem;
+        line-height: 1.6;
+        margin: 0 auto 2rem;
+      }
+
+      .tools-grid {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.35rem 1.1rem;
+        max-width: min(34rem, 100%);
+        margin: 0 auto;
+      }
+
+      .tool-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: center;
+        width: 4.6rem;
+      }
+
+      .tool-item__icon {
+        width: 2rem;
+        height: 2rem;
+        object-fit: contain;
+        display: block;
+      }
+
+      .tool-item__icon--cursor {
+        width: 2.2rem;
+        border-radius: 6px;
+      }
+
+      .tool-item__label {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: rgba(248, 251, 255, 0.88);
+        letter-spacing: 0.01em;
       }
 
       .hero h1 {
@@ -215,11 +331,12 @@
 
       .utility-link {
         width: 100%;
-        margin: 0 auto 2.2rem;
+        margin: auto auto 0;
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 0.35rem;
+        flex-shrink: 0;
       }
 
       .map-link {
@@ -655,7 +772,19 @@
         }
       }
 
-      @media (max-width: 560px) {
+      @media (prefers-reduced-motion: reduce) {
+        .scene__video {
+          scroll-behavior: auto;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .tool-item {
+          width: 4.25rem;
+        }
+      }
+
+      @media (max-width: 720px) {
         .shell {
           width: min(1200px, 94vw);
         }
@@ -715,22 +844,22 @@
   </head>
   <body>
     <main class="page">
-      <div class="bg-fallback" aria-hidden="true"></div>
-      <video
-        class="background-video"
-        id="background-video"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto"
-        aria-hidden="true"
-      >
-        <source src="./Assets/Underground_loop.mp4?v=2" type="video/mp4" />
-      </video>
-      <div class="overlay" aria-hidden="true"></div>
-
-      <div class="shell">
+      <section class="scene scene--surface">
+        <div class="scene__media" aria-hidden="true">
+          <video
+            class="scene__video"
+            id="background-video"
+            autoplay
+            muted
+            playsinline
+            preload="auto"
+          >
+            <source src="./Assets/Underground_loop.mp4?v=4" type="video/mp4" />
+          </video>
+          <div class="scene__overlay scene__overlay--surface"></div>
+        </div>
+        <div class="scene__content">
+          <div class="shell shell--surface">
         <header class="top-nav">
           <button
             class="nav-toggle"
@@ -795,7 +924,8 @@
         </header>
 
         <section class="hero">
-          <div>
+          <div class="hero__body">
+            <div>
             <h1>
               Turning complex behaviour into simple, measurable product experiences.
             </h1>
@@ -814,65 +944,254 @@
                 <span aria-hidden="true">↗</span>
               </a>
             </div>
+            </div>
+          </div>
+
+          <div class="utility-link">
+            <button
+              class="map-link audio-toggle is-muted"
+              type="button"
+              id="audio-toggle"
+              aria-label="Turn background audio on"
+              aria-pressed="true"
+            >
+              <svg class="map-link__icon audio-icon audio-icon--on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M11 5 6 9H3v6h3l5 4V5Z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M15.54 8.46a5 5 0 0 1 0 7.07M18.63 5.37a9 9 0 0 1 0 12.73"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <svg class="map-link__icon audio-icon audio-icon--off" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M11 5 6 9H3v6h3l5 4V5Z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="m22 9-6 6M16 9l6 6"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+            <button class="map-link" type="button" id="map-open" aria-haspopup="dialog">
+              <svg class="map-link__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M4 6.5 9 4l5 2.5 6-3v11.5l-6 3-5-2.5L4 18V6.5Z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 6.5v11.5M14 9v11.5"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Map
+            </button>
           </div>
         </section>
-
-        <div class="utility-link">
-          <button
-            class="map-link audio-toggle is-muted"
-            type="button"
-            id="audio-toggle"
-            aria-label="Turn background audio on"
-            aria-pressed="true"
-          >
-            <svg class="map-link__icon audio-icon audio-icon--on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M11 5 6 9H3v6h3l5 4V5Z"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M15.54 8.46a5 5 0 0 1 0 7.07M18.63 5.37a9 9 0 0 1 0 12.73"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-            </svg>
-            <svg class="map-link__icon audio-icon audio-icon--off" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M11 5 6 9H3v6h3l5 4V5Z"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linejoin="round"
-              />
-              <path
-                d="m22 9-6 6M16 9l6 6"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-          <button class="map-link" type="button" id="map-open" aria-haspopup="dialog">
-            <svg class="map-link__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M4 6.5 9 4l5 2.5 6-3v11.5l-6 3-5-2.5L4 18V6.5Z"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M9 6.5v11.5M14 9v11.5"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-            </svg>
-            Map
-          </button>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section class="scene scene--tunnel">
+        <div class="scene__media" aria-hidden="true">
+          <video
+            class="scene__video"
+            id="tunnel-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+          >
+            <source src="./Assets/Undeground_tunnel.mp4" type="video/mp4" />
+          </video>
+          <div class="scene__overlay scene__overlay--tunnel"></div>
+        </div>
+        <div class="scene__content">
+          <div class="shell shell--tunnel">
+        <section class="tools-section" aria-labelledby="tools-title">
+          <p class="tools-section__eyebrow">Toolkit</p>
+          <h2 class="tools-section__title" id="tools-title">Design, AI and delivery stack</h2>
+          <p class="tools-section__desc">
+            Tools I use across product strategy, rapid prototyping, native mobile, regulated fintech
+            and AI-assisted delivery — from research and systems thinking through to shipped
+            experiences.
+          </p>
+          <ul class="tools-grid">
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/figma/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Figma</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/miro/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Miro</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon tool-item__icon--cursor"
+                src="./Assets/cursor-logo.svg"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Cursor</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/anthropic/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Claude Code</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/supabase/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Supabase</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/firebase/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Firebase</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/vercel/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Vercel</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/mixpanel/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Mixpanel</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/maze/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Maze</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/github/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">GitHub</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/notion/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Notion</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/jira/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Jira</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/apple/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">iOS / HIG</span>
+            </li>
+            <li class="tool-item">
+              <img
+                class="tool-item__icon"
+                src="https://cdn.simpleicons.org/android/FFFFFF"
+                alt=""
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+              <span class="tool-item__label">Android</span>
+            </li>
+          </ul>
+        </section>
+          </div>
+        </div>
+      </section>
     </main>
 
     <div
@@ -958,8 +1277,16 @@
 
     <script>
       const backgroundVideo = document.getElementById("background-video");
+      const tunnelVideo = document.getElementById("tunnel-video");
       const audioToggle = document.getElementById("audio-toggle");
       let isBackgroundAudioMuted = true;
+
+      function setupTunnelVideoLoop(video) {
+        video.addEventListener("ended", () => {
+          video.currentTime = 0;
+          video.play().catch(() => {});
+        });
+      }
 
       function updateAudioToggleUi() {
         if (!audioToggle) {
@@ -998,11 +1325,42 @@
         }
       }
 
+      function setupBackgroundVideoLoop(video) {
+        video.addEventListener("ended", () => {
+          video.currentTime = 0;
+          video.play().catch(() => {});
+        });
+      }
+
       if (backgroundVideo) {
+        setupBackgroundVideoLoop(backgroundVideo);
         syncBackgroundVideoAudio();
         startBackgroundMedia();
         backgroundVideo.addEventListener("loadeddata", startBackgroundMedia);
         backgroundVideo.addEventListener("canplay", startBackgroundMedia);
+      }
+
+      if (tunnelVideo) {
+        tunnelVideo.volume = 0;
+        tunnelVideo.muted = true;
+        setupTunnelVideoLoop(tunnelVideo);
+
+        const tunnelScene = document.querySelector(".scene--tunnel");
+        if (tunnelScene) {
+          const tunnelObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  tunnelVideo.play().catch(() => {});
+                } else {
+                  tunnelVideo.pause();
+                }
+              });
+            },
+            { threshold: 0.12 }
+          );
+          tunnelObserver.observe(tunnelScene);
+        }
       }
 
       updateAudioToggleUi();
