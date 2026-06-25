@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="lovable-gradient" x1="13" y1="4" x2="21" y2="21" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E" />
+      <stop offset="0.45" stop-color="#14B8A6" />
+      <stop offset="1" stop-color="#4ADE80" />
+    </linearGradient>
+  </defs>
+  <path
+    fill="#4ADE80"
+    d="M5.1 16.2 11.2 5.4c.45-.78 1.55-.78 2 0l1.35 2.34c.28.48.1 1.1-.4 1.34L6.5 17.54c-.76.33-1.56-.36-1.4-1.34Z"
+  />
+  <path
+    fill="url(#lovable-gradient)"
+    d="M11.45 11.05 17.55 5.35c.62-.54 1.58-.2 1.74.58l.81 3.72c.1.46-.14.93-.58 1.14l-5.9 3.05c-.62.32-1.36-.12-1.47-.76l-.7-3.97c-.1-.58.32-1.14.9-1.26Z"
+  />
+  <path
+    fill="url(#lovable-gradient)"
+    d="M9.15 14.55 15.25 20.25c.62.54 1.58.2 1.74-.58l.81-3.72c.1-.46-.14-.93-.58-1.14l-5.9-3.05c-.62-.32-1.36.12-1.47.76l-.7 3.97c-.1.58.32 1.14.9 1.26Z"
+  />
+</svg>

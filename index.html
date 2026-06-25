@@ -245,6 +245,24 @@
         flex-direction: column;
         gap: 0.65rem;
         min-height: 9.5rem;
+        transform-style: preserve-3d;
+        transition: background 200ms ease;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      .work-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .work-card:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 3px;
+      }
+
+      .work-card.is-resetting {
+        transition: transform 220ms ease, background 200ms ease;
       }
 
       .work-card--span-2 {
@@ -277,12 +295,7 @@
         letter-spacing: 0.04em;
         text-transform: uppercase;
         width: fit-content;
-      }
-
-      .work-card__link:hover,
-      .work-card__link:focus-visible {
-        opacity: 0.72;
-        outline: none;
+        pointer-events: none;
       }
 
       .shell {
@@ -419,18 +432,11 @@
         width: 4.6rem;
       }
 
-      .tool-item__icon {
-        width: 2rem;
-        height: 2rem;
-        object-fit: contain;
+      .tool-item__spotlight {
         display: block;
       }
 
-      .tool-item__icon--brand {
-        border-radius: 6px;
-      }
-
-      .tool-item__icon-pair {
+      .tool-item__spotlight--pair {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -438,9 +444,60 @@
         min-height: 2rem;
       }
 
-      .tool-item__icon-pair .tool-item__icon {
+      .tool-item__icon-layer {
+        --spot-x: -999px;
+        --spot-y: -999px;
+        position: relative;
+        width: 2rem;
+        height: 2rem;
+        flex-shrink: 0;
+      }
+
+      .tool-item__spotlight--pair .tool-item__icon-layer {
         width: 1.55rem;
         height: 1.55rem;
+      }
+
+      .tool-item__icon--color,
+      .tool-item__icon--mono {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        pointer-events: none;
+      }
+
+      .tool-item__icon--mono {
+        -webkit-mask-image: radial-gradient(
+          circle 10px at var(--spot-x) var(--spot-y),
+          transparent 0,
+          transparent 10px,
+          #000 10.01px
+        );
+        mask-image: radial-gradient(
+          circle 10px at var(--spot-x) var(--spot-y),
+          transparent 0,
+          transparent 10px,
+          #000 10.01px
+        );
+      }
+
+      .tool-item__icon--brand.tool-item__icon--mono {
+        border-radius: 6px;
+      }
+
+      .tool-item__icon--mono.tool-item__icon--flatten {
+        filter: grayscale(1) brightness(2.8);
+      }
+
+      .tool-item__icon--color.tool-item__icon--tinted {
+        filter: saturate(2.4) hue-rotate(205deg) brightness(1.15);
+      }
+
+      .tool-item__icon--color.tool-item__icon--blend {
+        mix-blend-mode: lighten;
       }
 
       .tool-item__label {
@@ -463,6 +520,27 @@
         text-transform: uppercase;
         text-wrap: balance;
         text-shadow: 0 8px 35px rgba(0, 0, 0, 0.26);
+      }
+
+      .hero h1.hero-title--liquid {
+        cursor: default;
+        letter-spacing: normal;
+      }
+
+      .hero h1 .hero-title__word {
+        display: inline;
+        white-space: nowrap;
+      }
+
+      .hero h1 .hero-title__char {
+        display: inline-block;
+        margin-right: 0.2em;
+        transform-origin: 50% 88%;
+      }
+
+      .hero h1 .hero-title__gap {
+        display: inline-block;
+        width: 0.45em;
       }
 
       .hero p {
@@ -498,15 +576,18 @@
       }
 
       .btn-primary {
-        color: #10223b;
-        background: #ffffff;
+        color: var(--text);
+        background: var(--glass);
         border-radius: 16px;
-        border-color: transparent;
+        border-color: var(--glass-border);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
       }
 
       .btn-primary:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 28px rgba(3, 8, 18, 0.35);
+        color: #10223b;
+        background: #ffffff;
+        border-color: transparent;
       }
 
       .btn-secondary {
@@ -977,6 +1058,18 @@
         .snap-page {
           scroll-snap-stop: normal;
         }
+
+        .work-card {
+          transition: background 200ms ease;
+        }
+
+        .work-card.is-resetting {
+          transition: background 200ms ease;
+        }
+
+        .tool-item__icon--mono {
+          display: none;
+        }
       }
 
       @media (max-width: 900px) {
@@ -1056,6 +1149,9 @@
     </style>
   </head>
   <body>
+    <svg class="hero-title-filters" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs id="hero-title-filter-defs"></defs>
+    </svg>
     <main class="page">
       <div class="experience__bg" aria-hidden="true">
         <video
@@ -1238,79 +1334,166 @@
                 <div class="panel-extra-block">
                 <ul class="tools-grid">
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/figma/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="./Assets/figma-color.svg" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="./Assets/figma-mono.svg" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Figma</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/figma-make.svg" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="./Assets/figma-make-color.svg" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="./Assets/figma-make.svg" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Figma Make</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/miro/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/miro" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/miro/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Miro</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/dovetail/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/dovetail" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/dovetail/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Dovetail</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/notion/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/notion" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/notion/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Notion</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/jira/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/jira" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/jira/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Jira</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="./Assets/cursor-mark.svg" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/cursor" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="./Assets/cursor-mark.svg" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Cursor</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/anthropic/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/anthropic" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/anthropic/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Claude Code</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/relume.svg" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="./Assets/relume.svg" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono tool-item__icon--brand tool-item__icon--flatten" src="./Assets/relume.svg" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Relume</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/lovable.svg" alt="" width="32" height="32" loading="lazy" />
-              <span class="tool-item__label">Lovable</span>
-            </li>
-            <li class="tool-item">
-              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/uxpilot.svg" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color tool-item__icon--tinted" src="./Assets/uxpilot.svg" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono tool-item__icon--brand" src="./Assets/uxpilot.svg" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">UX Pilot</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/supabase/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/supabase" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/supabase/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Supabase</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/googleanalytics/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/googleanalytics" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/googleanalytics/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Google Analytics</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/mixpanel/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/mixpanel" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/mixpanel/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Mixpanel</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon tool-item__icon--brand" src="./Assets/contentsquare.svg" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="./Assets/contentsquare-color.svg" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="./Assets/contentsquare-mono.svg" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">Contentsquare</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/html5/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/html5" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/html5/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">HTML</span>
             </li>
             <li class="tool-item">
-              <img class="tool-item__icon" src="https://cdn.simpleicons.org/css/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/css" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/css/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
               <span class="tool-item__label">CSS</span>
             </li>
             <li class="tool-item">
-              <div class="tool-item__icon-pair" aria-hidden="true">
-                <img class="tool-item__icon" src="https://cdn.simpleicons.org/apple/FFFFFF" alt="" width="32" height="32" loading="lazy" />
-                <img class="tool-item__icon" src="https://cdn.simpleicons.org/android/FFFFFF" alt="" width="32" height="32" loading="lazy" />
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/apple" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/apple/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
               </div>
-              <span class="tool-item__label">iOS & Android</span>
+              <span class="tool-item__label">iOS</span>
+            </li>
+            <li class="tool-item">
+              <div class="tool-item__spotlight">
+                <div class="tool-item__icon-layer">
+                  <img class="tool-item__icon tool-item__icon--color" src="https://cdn.simpleicons.org/android" alt="" width="32" height="32" loading="lazy" />
+                  <img class="tool-item__icon tool-item__icon--mono" src="https://cdn.simpleicons.org/android/FFFFFF" alt="" width="32" height="32" loading="lazy" aria-hidden="true" />
+                </div>
+              </div>
+              <span class="tool-item__label">Android</span>
             </li>
           </ul>
                 </div>
@@ -1325,36 +1508,36 @@
                 </div>
                 <div class="panel-extra-block">
             <div class="work-grid">
-              <article class="work-card work-card--span-2">
+              <a class="work-card work-card--span-2 protected-link" href="https://www.figma.com/deck/7tZvvjMAGYWm2TyfyCSe6n" target="_blank" rel="noreferrer">
                 <h3 class="work-card__title">Shopping Lists</h3>
                 <p class="work-card__desc">AI-assisted shopping lists that understand intent, adapt in real time and drive more basket value.</p>
-                <a class="work-card__link protected-link" href="https://www.figma.com/deck/7tZvvjMAGYWm2TyfyCSe6n" target="_blank" rel="noreferrer">View case study</a>
-              </article>
-              <article class="work-card work-card--span-2">
+                <span class="work-card__link">View case study</span>
+              </a>
+              <a class="work-card work-card--span-2 protected-link" href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko" target="_blank" rel="noreferrer">
                 <h3 class="work-card__title">Quick Shop</h3>
                 <p class="work-card__desc">Smart recommendations at the right moment to make shopping faster, easier and more relevant.</p>
-                <a class="work-card__link protected-link" href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko" target="_blank" rel="noreferrer">View case study</a>
-              </article>
-              <article class="work-card">
+                <span class="work-card__link">View case study</span>
+              </a>
+              <a class="work-card protected-link" href="https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr" target="_blank" rel="noreferrer">
                 <h3 class="work-card__title">Cellar</h3>
                 <p class="work-card__desc">Redefining account strategy and onboarding to reduce delivery effort by over 50% while accelerating customer value.</p>
-                <a class="work-card__link protected-link" href="https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr" target="_blank" rel="noreferrer">View case study</a>
-              </article>
-              <article class="work-card">
+                <span class="work-card__link">View case study</span>
+              </a>
+              <a class="work-card protected-link" href="https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc" target="_blank" rel="noreferrer">
                 <h3 class="work-card__title">PrimaryBid</h3>
                 <p class="work-card__desc">Simplifying complex IPO investment workflows for trust, clarity and confidence at every step.</p>
-                <a class="work-card__link protected-link" href="https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc" target="_blank" rel="noreferrer">View case study</a>
-              </article>
-              <article class="work-card">
+                <span class="work-card__link">View case study</span>
+              </a>
+              <a class="work-card protected-link" href="https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12" target="_blank" rel="noreferrer">
                 <h3 class="work-card__title">Kaizen Languages</h3>
                 <p class="work-card__desc">iOS and Android AI language learning that adapts to motivation, ability and real-life progress.</p>
-                <a class="work-card__link protected-link" href="https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12" target="_blank" rel="noreferrer">View case study</a>
-              </article>
-              <article class="work-card">
+                <span class="work-card__link">View case study</span>
+              </a>
+              <a class="work-card protected-link" href="https://www.jacinto.website/#work" target="_blank" rel="noreferrer">
                 <h3 class="work-card__title">Smarter</h3>
                 <p class="work-card__desc">Designing one connected app for the iKettle, Smarter Coffee and FridgeCam across a smart kitchen ecosystem.</p>
-                <a class="work-card__link protected-link" href="https://www.jacinto.website/#work" target="_blank" rel="noreferrer">View case study</a>
-              </article>
+                <span class="work-card__link">View case study</span>
+              </a>
             </div>
                 </div>
               </section>
@@ -1552,6 +1735,228 @@
       });
 
       showPanel(0);
+
+      function setupWorkCardTilt() {
+        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+          return;
+        }
+
+        const maxTilt = 6;
+
+        document.querySelectorAll(".work-card").forEach((card) => {
+          card.addEventListener("mousemove", (event) => {
+            const rect = card.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -maxTilt;
+            const rotateY = ((x - centerX) / centerX) * maxTilt;
+
+            card.classList.remove("is-resetting");
+            card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          });
+
+          card.addEventListener("mouseleave", () => {
+            card.classList.add("is-resetting");
+            card.style.transform = "";
+          });
+        });
+      }
+
+      setupWorkCardTilt();
+
+      function setupToolIconSpotlight() {
+        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+          return;
+        }
+
+        document.querySelectorAll(".tool-item__icon-layer").forEach((layer) => {
+          layer.addEventListener("mousemove", (event) => {
+            const rect = layer.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            layer.style.setProperty("--spot-x", `${x}px`);
+            layer.style.setProperty("--spot-y", `${y}px`);
+          });
+
+          layer.addEventListener("mouseleave", () => {
+            layer.style.setProperty("--spot-x", "-999px");
+            layer.style.setProperty("--spot-y", "-999px");
+          });
+        });
+      }
+
+      setupToolIconSpotlight();
+
+      function setupHeroTitleLiquid() {
+        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+          return;
+        }
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+
+        const title = document.querySelector(".hero h1");
+        const filterDefs = document.getElementById("hero-title-filter-defs");
+
+        if (!title || !filterDefs || title.dataset.heroTitleReady === "true") {
+          return;
+        }
+
+        const svgNs = "http://www.w3.org/2000/svg";
+        const radius = 20;
+        const maxScale = 30;
+        const chars = [];
+        const originalText = title.textContent.trim();
+
+        function createCharFilter(index) {
+          const filter = document.createElementNS(svgNs, "filter");
+          const filterId = `hero-title-distort-${index}`;
+
+          filter.setAttribute("id", filterId);
+          filter.setAttribute("x", "-80%");
+          filter.setAttribute("y", "-80%");
+          filter.setAttribute("width", "260%");
+          filter.setAttribute("height", "260%");
+          filter.setAttribute("color-interpolation-filters", "sRGB");
+
+          const noise = document.createElementNS(svgNs, "feTurbulence");
+          noise.setAttribute("type", "fractalNoise");
+          noise.setAttribute("baseFrequency", "0.014 0.04");
+          noise.setAttribute("numOctaves", "2");
+          noise.setAttribute("seed", "2");
+          noise.setAttribute("result", "noise");
+
+          const displace = document.createElementNS(svgNs, "feDisplacementMap");
+          displace.setAttribute("in", "SourceGraphic");
+          displace.setAttribute("in2", "noise");
+          displace.setAttribute("scale", "0");
+          displace.setAttribute("xChannelSelector", "R");
+          displace.setAttribute("yChannelSelector", "G");
+
+          filter.appendChild(noise);
+          filter.appendChild(displace);
+          filterDefs.appendChild(filter);
+
+          return { filterId, displace, noise };
+        }
+
+        function splitTitleIntoChars() {
+          title.textContent = "";
+          title.setAttribute("aria-label", originalText);
+
+          originalText.split(/\s+/).forEach((word, wordIndex, words) => {
+            const wordSpan = document.createElement("span");
+            wordSpan.className = "hero-title__word";
+
+            [...word].forEach((character) => {
+              const charSpan = document.createElement("span");
+              charSpan.className = "hero-title__char";
+              charSpan.textContent = character;
+              charSpan.setAttribute("aria-hidden", "true");
+
+              const filter = createCharFilter(chars.length);
+              chars.push({
+                el: charSpan,
+                displace: filter.displace,
+                noise: filter.noise,
+                filterId: filter.filterId,
+                currentScale: 0,
+                targetScale: 0,
+                currentFreqY: 0.04,
+                targetFreqY: 0.04,
+              });
+
+              wordSpan.appendChild(charSpan);
+            });
+
+            title.appendChild(wordSpan);
+
+            if (wordIndex < words.length - 1) {
+              const gap = document.createElement("span");
+              gap.className = "hero-title__gap";
+              gap.innerHTML = "&nbsp;";
+              gap.setAttribute("aria-hidden", "true");
+              title.appendChild(gap);
+            }
+          });
+        }
+
+        splitTitleIntoChars();
+        title.dataset.heroTitleReady = "true";
+        title.classList.add("hero-title--liquid");
+
+        let frameId = 0;
+
+        function smoothstep(value) {
+          return value * value * (3 - 2 * value);
+        }
+
+        function tick() {
+          let needsFrame = false;
+
+          chars.forEach((char) => {
+            char.currentScale += (char.targetScale - char.currentScale) * 0.14;
+            char.currentFreqY += (char.targetFreqY - char.currentFreqY) * 0.14;
+
+            char.displace.setAttribute("scale", char.currentScale.toFixed(2));
+            char.noise.setAttribute(
+              "baseFrequency",
+              `0.014 ${char.currentFreqY.toFixed(4)}`
+            );
+
+            if (char.currentScale > 0.35) {
+              char.el.style.filter = `url("#${char.filterId}")`;
+            } else if (char.targetScale === 0 && char.currentScale < 0.08) {
+              char.el.style.filter = "";
+            }
+
+            if (
+              Math.abs(char.targetScale - char.currentScale) > 0.12 ||
+              Math.abs(char.targetFreqY - char.currentFreqY) > 0.0004
+            ) {
+              needsFrame = true;
+            }
+          });
+
+          frameId = needsFrame ? requestAnimationFrame(tick) : 0;
+        }
+
+        function startAnimation() {
+          if (!frameId) {
+            frameId = requestAnimationFrame(tick);
+          }
+        }
+
+        title.addEventListener("mousemove", (event) => {
+          chars.forEach((char) => {
+            const rect = char.el.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const distance = Math.hypot(event.clientX - centerX, event.clientY - centerY);
+            const influence = smoothstep(Math.max(0, 1 - distance / radius));
+
+            char.targetScale = influence * maxScale;
+            char.targetFreqY = 0.04 + influence * 0.05;
+          });
+
+          startAnimation();
+        });
+
+        title.addEventListener("mouseleave", () => {
+          chars.forEach((char) => {
+            char.targetScale = 0;
+            char.targetFreqY = 0.04;
+          });
+
+          startAnimation();
+        });
+      }
+
+      setupHeroTitleLiquid();
 
       function setupBackgroundVideoLoop(video) {
         video.addEventListener("ended", () => {
