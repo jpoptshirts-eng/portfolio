@@ -237,6 +237,7 @@
       }
 
       .work-card {
+        position: relative;
         border: 1px solid #ffffff;
         border-radius: 12px;
         background: transparent;
@@ -277,6 +278,7 @@
         text-transform: uppercase;
         color: #ffffff;
         line-height: 1.25;
+        padding-right: 1.35rem;
       }
 
       .work-card__desc {
@@ -284,17 +286,30 @@
         font-weight: 300;
         line-height: 1.5;
         color: rgba(248, 251, 255, 0.78);
-        flex: 1;
       }
 
-      .work-card__link {
-        font-size: 0.8rem;
-        font-weight: 500;
+      .work-card__metric {
+        margin-top: auto;
+        padding-top: 0.35rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        line-height: 1.35;
         color: #ffffff;
-        text-decoration: none;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        width: fit-content;
+        letter-spacing: 0.01em;
+      }
+
+      .work-card__metric-label {
+        font-weight: 500;
+        color: rgba(248, 251, 255, 0.82);
+      }
+
+      .work-card__arrow {
+        position: absolute;
+        top: 0.9rem;
+        right: 0.95rem;
+        width: 0.95rem;
+        height: 0.95rem;
+        color: #ffffff;
         pointer-events: none;
       }
 
@@ -303,12 +318,25 @@
         margin: 0 auto;
       }
 
-      .top-nav {
+      .site-header {
         position: fixed;
         top: 1rem;
         left: 50%;
         transform: translateX(-50%);
         z-index: 30;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: calc(0.5rem + 8px);
+        width: fit-content;
+        max-width: 100%;
+      }
+
+      .site-header .tools-section__eyebrow {
+        margin: 0;
+      }
+
+      .top-nav {
         margin: 0;
         width: fit-content;
         max-width: 100%;
@@ -657,9 +685,6 @@
         position: fixed;
         inset: 0;
         z-index: 110;
-        display: grid;
-        place-items: center;
-        padding: 1.25rem;
       }
 
       .map-modal[hidden] {
@@ -669,221 +694,450 @@
       .map-modal__backdrop {
         position: absolute;
         inset: 0;
-        background: rgba(2, 10, 20, 0.55);
-        backdrop-filter: blur(4px);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
       }
 
       .map-modal__dialog {
         position: relative;
-        width: min(1100px, 90vw);
-        max-height: min(94vh, 920px);
-        background: #fff;
-        color: #10223b;
-        border-radius: 20px;
-        box-shadow: 0 28px 70px rgba(2, 10, 20, 0.28);
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        background: transparent;
+        color: #f8fbff;
       }
 
-      .map-modal__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 1.35rem 1.5rem 0.85rem;
-        flex-shrink: 0;
+      .map-modal.is-open .map-axon__scene {
+        animation: mapAxonReveal 720ms ease forwards;
       }
 
-      .map-modal__title {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #10223b;
+      .map-modal.is-open .map-axon__layer {
+        animation: mapLayerReveal 640ms ease forwards;
       }
 
-      .map-modal__title-icon {
-        width: 1.1rem;
-        height: 1.1rem;
-        color: #475569;
+      .map-modal.is-open .map-axon__layer--deep {
+        animation-delay: 0.08s;
+      }
+
+      .map-modal.is-open .map-axon__layer--mid {
+        animation-delay: 0.16s;
+      }
+
+      .map-modal.is-open .map-axon__layer--surface {
+        animation-delay: 0.24s;
+      }
+
+      .map-modal.is-open .map-axon__layer--detail {
+        animation-delay: 0.32s;
+      }
+
+      @keyframes mapAxonReveal {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes mapLayerReveal {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .map-modal__sr-title {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
 
       .map-modal__close {
-        width: 2.25rem;
-        height: 2.25rem;
+        position: fixed;
+        top: 1.15rem;
+        right: 1.15rem;
+        z-index: 12;
+        width: 3.25rem;
+        height: 3.25rem;
         border: 0;
         border-radius: 999px;
-        background: #f1f5f9;
-        color: #334155;
-        font-size: 1.35rem;
-        line-height: 1;
+        background: #ffffff;
+        color: #000000;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         flex-shrink: 0;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+        transition: transform 170ms ease, box-shadow 170ms ease;
+      }
+
+      .map-modal__close svg {
+        width: 1.1rem;
+        height: 1.1rem;
       }
 
       .map-modal__close:hover,
       .map-modal__close:focus-visible {
-        background: #e2e8f0;
-        outline: 2px solid rgba(37, 99, 235, 0.35);
-        outline-offset: 1px;
+        transform: scale(1.05);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.34);
+        outline: 2px solid rgba(255, 255, 255, 0.65);
+        outline-offset: 2px;
       }
 
       .map-modal__body {
+        flex: 1;
         overflow: auto;
-        padding: 2rem 2.5rem 2.5rem;
+        padding: 4.75rem 5rem 1.25rem 1.25rem;
         -webkit-overflow-scrolling: touch;
         display: flex;
         justify-content: center;
+        align-items: center;
+        min-height: 0;
       }
 
-      .map-diagram {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-      }
-
-      .map-diagram--desktop {
-        display: flex;
-      }
-
-      .map-diagram--mobile {
+      .map-modal__mobile {
         display: none;
         width: 100%;
       }
 
-      .map-stage {
-        position: relative;
-        width: 1100px;
-        max-width: 100%;
-        aspect-ratio: 1100 / 760;
-        height: auto;
+      .map-modal__mobile-list {
+        width: 100%;
+        max-width: 22rem;
         margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+      }
+
+      .map-mobile-item {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        padding: 0.35rem 0;
+        min-height: 2.75rem;
+      }
+
+      .map-mobile-item__title {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        font-size: 1.125rem;
+        font-weight: 600;
+        line-height: 1.35;
+        color: #ffffff;
+      }
+
+      .map-mobile-item__desc {
+        margin: 0.5rem 0 0;
+        font-family: "Inter", sans-serif;
+        font-size: 0.9375rem;
+        line-height: 1.55;
+        color: rgba(248, 251, 255, 0.68);
+      }
+
+      .map-mobile-item--link-only {
+        padding: 0.65rem 0;
+      }
+
+      .map-mobile-item--link-only .map-mobile-item__title {
+        font-size: 1.0625rem;
+      }
+
+      .map-mobile-item:hover .map-mobile-item__title,
+      .map-mobile-item:focus-visible .map-mobile-item__title {
+        color: #ffffff;
+      }
+
+      .map-mobile-item:hover .map-mobile-item__desc,
+      .map-mobile-item:focus-visible .map-mobile-item__desc {
+        color: rgba(248, 251, 255, 0.92);
+      }
+
+      .map-mobile-item:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.65);
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
+
+      .map-axon {
+        width: 80vw;
+        height: 80vh;
+        max-width: 80vw;
+        max-height: 80vh;
         flex-shrink: 0;
       }
 
-      .map-stage__svg {
+      .map-axon__viewport {
+        width: 100%;
+        height: 100%;
+      }
+
+      .map-axon__scene {
+        opacity: 0;
+        transform: translateY(18px);
+        width: 100%;
+        height: 100%;
+      }
+
+      .map-axon__stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .map-axon__svg {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
         overflow: visible;
-        z-index: 0;
       }
 
-      .map-card {
+      .map-axon__svg--model {
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .map-axon__svg--leaders {
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .map-axon__labels {
+        z-index: 3;
+      }
+
+      .map-model [vector-effect="non-scaling-stroke"] {
+        vector-effect: non-scaling-stroke;
+      }
+
+      .map-axon__layer {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      .map-axon__svg .map-axon__shadow {
+        fill: none;
+        stroke: rgba(30, 34, 40, 0.55);
+        stroke-width: 10;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .map-axon__svg .map-axon__tunnel-outer {
+        fill: none;
+        stroke: rgba(92, 102, 114, 0.55);
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: stroke 200ms ease, opacity 200ms ease;
+      }
+
+      .map-axon__svg .map-axon__tunnel {
+        fill: none;
+        stroke: #aeb6c2;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: stroke 200ms ease, opacity 200ms ease;
+      }
+
+      .map-axon__svg .map-axon__tunnel.is-active,
+      .map-axon__svg .map-axon__tunnel-outer.is-active {
+        stroke: #e8edf2;
+        opacity: 1;
+      }
+
+      .map-axon__svg .map-axon__platform {
+        fill: rgba(255, 255, 255, 0.03);
+        stroke: #8b939e;
+        stroke-width: 1.4;
+        transition: stroke 200ms ease, fill 200ms ease;
+      }
+
+      .map-axon__svg .map-axon__platform--large {
+        stroke-width: 1.6;
+      }
+
+      .map-axon__svg .map-axon__platform--exit {
+        fill: rgba(255, 255, 255, 0.02);
+        stroke: #9aa3ad;
+        stroke-width: 1.1;
+      }
+
+      .map-axon__svg .map-axon__platform.is-active {
+        stroke: #ffffff;
+        fill: rgba(255, 255, 255, 0.08);
+      }
+
+      .map-axon__svg .map-axon__portal {
+        fill: rgba(8, 9, 12, 0.35);
+        stroke: #b8c0cb;
+        stroke-width: 1.5;
+        transition: stroke 200ms ease;
+      }
+
+      .map-axon__svg .map-axon__portal.is-active {
+        stroke: #ffffff;
+      }
+
+      .map-axon__svg .map-axon__marker {
+        fill: transparent;
+        stroke: #ffffff;
+        stroke-width: 2;
+        transition: stroke 200ms ease, fill 200ms ease;
+      }
+
+      .map-axon__svg .map-axon__marker.is-active {
+        stroke: #ffffff;
+        fill: rgba(255, 255, 255, 0.12);
+      }
+
+      .map-axon__svg .map-axon__hub-ring {
+        fill: none;
+        stroke: #7f8894;
+        stroke-width: 1.2;
+        opacity: 0.85;
+      }
+
+      .map-axon__svg .map-axon__hub-deck {
+        fill: rgba(255, 255, 255, 0.025);
+        stroke: #9aa3ad;
+        stroke-width: 1.3;
+      }
+
+      .map-axon__svg .map-axon__shaft {
+        fill: none;
+        stroke: #6d7682;
+        stroke-width: 1.2;
+        opacity: 0.75;
+      }
+
+      .map-axon__svg .map-axon__stairs {
+        fill: none;
+        stroke: #707986;
+        stroke-width: 1;
+        opacity: 0.8;
+      }
+
+      .map-axon__svg .map-axon__leader {
+        fill: none;
+        stroke: rgba(138, 147, 158, 0.65);
+        stroke-width: 1;
+        stroke-dasharray: 4 4;
+        transition: stroke 200ms ease, opacity 200ms ease;
+      }
+
+      .map-axon__svg .map-axon__leader.is-active {
+        stroke: rgba(232, 237, 242, 0.9);
+        opacity: 1;
+      }
+
+      .map-axon__svg .map-axon__detail {
+        fill: none;
+        stroke: rgba(110, 118, 128, 0.45);
+        stroke-width: 0.9;
+      }
+
+      .map-axon__labels {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .map-station {
         position: absolute;
         z-index: 1;
         padding: 0;
-        background: transparent;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
         font-family: "Inter", sans-serif;
         line-height: 1.45;
         box-sizing: border-box;
+        text-decoration: none;
+        color: inherit;
+        pointer-events: auto;
+        max-width: 228px;
+        transition: color 180ms ease;
       }
 
-      .map-card--anchor-left {
-        width: calc(236 / 1100 * 100%);
-        text-align: left;
+      .map-station--align-center {
+        text-align: center;
       }
 
-      .map-card--anchor-right {
-        width: calc(280 / 1100 * 100%);
-        text-align: left;
+      .map-station:hover,
+      .map-station:focus-visible {
+        outline: none;
+        background: none;
+        box-shadow: none;
       }
 
-      .map-card--anchor-center {
-        width: calc(260 / 1100 * 100%);
-        text-align: left;
-      }
-
-      .map-card__title {
+      .map-station__title {
         margin: 0 0 8px;
         font-size: 17px;
-        font-weight: 700;
-        line-height: 1.25;
+        font-weight: 600;
+        line-height: 1.3;
+        color: #ffffff;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.38);
+        transition: color 180ms ease;
       }
 
-      .map-card__desc {
+      .map-station__desc {
         margin: 0;
         font-size: 14px;
-        color: #64748b;
-        max-width: 260px;
+        color: rgba(248, 251, 255, 0.68);
+        max-width: 228px;
+        line-height: 1.55;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.32);
+        transition: color 180ms ease;
       }
 
-      .map-card--title-only .map-card__title {
+      .map-station--title-only {
+        max-width: 168px;
+        padding: 0;
+      }
+
+      .map-station--title-only .map-station__title {
         margin: 0;
+        font-size: 15px;
+        line-height: 1.3;
       }
 
-      .map-card--red .map-card__title { color: #c41e3a; }
-      .map-card--pink .map-card__title { color: #d63f86; }
-      .map-card--green .map-card__title { color: #2d8a4e; }
-      .map-card--blue .map-card__title { color: #1e5fcc; }
-      .map-card--orange .map-card__title { color: #e8740c; }
-      .map-card--purple .map-card__title { color: #7b4ec9; }
-      .map-card--lime .map-card__title { color: #16a34a; }
-
-      .map-mobile-stage {
-        display: grid;
-        grid-template-columns: 72px 1fr;
-        gap: 0 14px;
-        width: 100%;
-        max-width: 520px;
-        margin: 0 auto;
-        align-items: stretch;
-        padding-bottom: 0.5rem;
+      .map-station:hover .map-station__title,
+      .map-station:focus-visible .map-station__title,
+      .map-station.is-active .map-station__title {
+        color: #ffffff;
       }
 
-      .map-mobile-stage__rail {
-        position: relative;
-        min-height: 100%;
-      }
-
-      .map-mobile-stage__svg {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      .map-mobile-stage__cards {
-        display: flex;
-        flex-direction: column;
-        gap: 28px;
-        padding: 0.25rem 0 0;
-      }
-
-      .map-mobile-stage .map-card {
-        position: relative;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .map-mobile-stage .map-card:not(.map-card--title-only) {
-        min-height: 96px;
-      }
-
-      .map-mobile-stage .map-card--title-only {
-        min-height: 36px;
-      }
-
-      .map-mobile-stage .map-card__desc {
-        max-width: none;
-      }
-
-      .map-stage .map-card__title {
-        font-size: clamp(14px, 1.45vw, 17px);
-      }
-
-      .map-stage .map-card__desc {
-        font-size: clamp(12px, 1.2vw, 14px);
+      .map-station:hover .map-station__desc,
+      .map-station:focus-visible .map-station__desc,
+      .map-station.is-active .map-station__desc {
+        color: rgba(248, 251, 255, 0.92);
       }
 
       body.map-modal-open {
         overflow: hidden;
       }
+
 
       .password-modal {
         position: fixed;
@@ -982,8 +1236,12 @@
       }
 
       @media (max-width: 860px) {
-        .top-nav {
+        .site-header {
           width: min(100%, 780px);
+        }
+
+        .top-nav {
+          width: 100%;
           border-radius: 24px;
         }
 
@@ -1003,46 +1261,68 @@
 
       }
 
-      @media (max-width: 767px) {
-        .map-modal {
-          padding: 0;
-          place-items: stretch;
+      @media (max-width: 1024px) and (min-width: 768px) {
+        .map-axon {
+          width: 88vw;
+          height: 88vh;
+          max-width: 88vw;
+          max-height: 88vh;
+        }
+      }
+
+      @media (max-width: 767px) and (min-width: 545px) {
+        .map-modal__body {
+          padding: 4.25rem 0.75rem 0.75rem;
+          align-items: flex-start;
         }
 
-        .map-modal__dialog {
-          width: 100%;
+        .map-modal__close {
+          top: 0.9rem;
+          right: 0.9rem;
+          width: 3rem;
+          height: 3rem;
+        }
+
+        .map-axon {
+          width: max(96vw, calc(88vh * 2000 / 1400));
+          height: max(88vh, calc(96vw * 1400 / 2000));
+          max-width: none;
           max-height: none;
-          min-height: 100%;
-          height: 100%;
-          border-radius: 0;
-          box-shadow: none;
         }
 
-        .map-modal__header {
-          padding: 1rem 1rem 0.75rem;
-          border-bottom: 1px solid #e2e8f0;
+        .map-station {
+          max-width: 210px;
+        }
+
+        .map-station__desc {
+          max-width: 210px;
+        }
+
+        .map-station--title-only {
+          max-width: 156px;
+        }
+      }
+
+      @media (max-width: 544px) {
+        .map-axon {
+          display: none !important;
+        }
+
+        .map-modal__mobile {
+          display: block;
         }
 
         .map-modal__body {
-          padding: 1rem 1rem 1.5rem;
-          flex: 1;
-          display: block;
+          align-items: flex-start;
+          justify-content: center;
+          padding: 5rem 1.25rem 2.5rem;
         }
 
-        .map-diagram--desktop {
-          display: none;
-        }
-
-        .map-diagram--mobile {
-          display: block;
-        }
-
-        .map-card__title {
-          font-size: 18px;
-        }
-
-        .map-card__desc {
-          font-size: 15px;
+        .map-modal__close {
+          top: 0.9rem;
+          right: 0.9rem;
+          width: 3rem;
+          height: 3rem;
         }
       }
 
@@ -1069,6 +1349,15 @@
 
         .tool-item__icon--mono {
           display: none;
+        }
+
+        .map-modal.is-open .map-axon__scene,
+        .map-modal.is-open .map-axon__layer,
+        .map-axon__scene,
+        .map-axon__layer {
+          animation: none;
+          opacity: 1;
+          transform: none;
         }
       }
 
@@ -1115,11 +1404,15 @@
       }
 
       @media (max-width: 544px) {
-        .top-nav {
+        .site-header {
+          top: 0.75rem;
           width: min(100%, 520px);
+        }
+
+        .top-nav {
+          width: 100%;
           border-radius: 18px;
           padding: 0.5rem;
-          top: 0.75rem;
         }
 
         .nav-toggle {
@@ -1168,7 +1461,8 @@
         <div class="experience__overlay"></div>
       </div>
 
-      <header class="top-nav">
+      <header class="site-header">
+        <div class="top-nav">
           <button
             class="nav-toggle"
             type="button"
@@ -1229,12 +1523,14 @@
               >Kaizen</a
             >
           </nav>
-        </header>
+        </div>
+        <p class="tools-section__eyebrow">Presentations</p>
+      </header>
 
       <nav class="panel-nav" aria-label="Section navigation">
         <button type="button" class="panel-nav__line is-active" data-panel="0" aria-label="Introduction" aria-current="true"></button>
-        <button type="button" class="panel-nav__line" data-panel="1" aria-label="Toolkit"></button>
-        <button type="button" class="panel-nav__line" data-panel="2" aria-label="Case studies"></button>
+        <button type="button" class="panel-nav__line" data-panel="1" aria-label="Case studies"></button>
+        <button type="button" class="panel-nav__line" data-panel="2" aria-label="Toolkit"></button>
       </nav>
 
       <div class="utility-link">
@@ -1320,7 +1616,68 @@
               </section>
             </div>
 
-            <div class="content-panel" data-panel="1" id="panel-toolkit">
+            <div class="content-panel" data-panel="1" id="panel-work">
+              <section class="work-section" aria-labelledby="work-title">
+                <div class="panel-copy-block">
+                  <p class="tools-section__eyebrow">Case studies</p>
+                  <h2 class="tools-section__title" id="work-title">Selected work</h2>
+                </div>
+                <div class="panel-extra-block">
+            <div class="work-grid">
+              <a class="work-card work-card--span-2 protected-link" href="https://www.figma.com/deck/7tZvvjMAGYWm2TyfyCSe6n" target="_blank" rel="noreferrer">
+                <svg class="work-card__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <h3 class="work-card__title">Shopping Lists</h3>
+                <p class="work-card__desc">AI-assisted shopping lists that understand intent, adapt in real time and drive more basket value.</p>
+                <p class="work-card__metric"><span class="work-card__metric-label">Key metric:</span> 6/7 ease-of-use score</p>
+              </a>
+              <a class="work-card work-card--span-2 protected-link" href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko" target="_blank" rel="noreferrer">
+                <svg class="work-card__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <h3 class="work-card__title">Quick Shop</h3>
+                <p class="work-card__desc">Smart recommendations at the right moment to make shopping faster, easier and more relevant.</p>
+                <p class="work-card__metric"><span class="work-card__metric-label">Key metric:</span> 5m 06s faster</p>
+              </a>
+              <a class="work-card protected-link" href="https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr" target="_blank" rel="noreferrer">
+                <svg class="work-card__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <h3 class="work-card__title">Cellar</h3>
+                <p class="work-card__desc">Redefining account strategy and onboarding to reduce delivery effort by over 50% while accelerating customer value.</p>
+                <p class="work-card__metric"><span class="work-card__metric-label">Key metric:</span> 50%+ reduction in estimated delivery effort</p>
+              </a>
+              <a class="work-card protected-link" href="https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc" target="_blank" rel="noreferrer">
+                <svg class="work-card__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <h3 class="work-card__title">PrimaryBid</h3>
+                <p class="work-card__desc">Simplifying complex IPO investment workflows for trust, clarity and confidence at every step.</p>
+                <p class="work-card__metric"><span class="work-card__metric-label">Key metric:</span> 4 high-trust journeys redesigned</p>
+              </a>
+              <a class="work-card protected-link" href="https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12" target="_blank" rel="noreferrer">
+                <svg class="work-card__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <h3 class="work-card__title">Kaizen Languages</h3>
+                <p class="work-card__desc">iOS and Android AI language learning that adapts to motivation, ability and real-life progress.</p>
+                <p class="work-card__metric"><span class="work-card__metric-label">Key metric:</span> NPS 62</p>
+              </a>
+              <a class="work-card protected-link" href="https://www.jacinto.website/#work" target="_blank" rel="noreferrer">
+                <svg class="work-card__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 17 17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <h3 class="work-card__title">Smarter</h3>
+                <p class="work-card__desc">Designing one connected app for the iKettle, Smarter Coffee and FridgeCam across a smart kitchen ecosystem.</p>
+                <p class="work-card__metric"><span class="work-card__metric-label">Key metric:</span> 3 connected products supported</p>
+              </a>
+            </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="content-panel" data-panel="2" id="panel-toolkit">
               <section class="tools-section" aria-labelledby="tools-title">
                 <div class="panel-copy-block">
                   <p class="tools-section__eyebrow">Toolkit</p>
@@ -1499,49 +1856,6 @@
                 </div>
               </section>
             </div>
-
-            <div class="content-panel" data-panel="2" id="panel-work">
-              <section class="work-section" aria-labelledby="work-title">
-                <div class="panel-copy-block">
-                  <p class="tools-section__eyebrow">Case studies</p>
-                  <h2 class="tools-section__title" id="work-title">Selected work</h2>
-                </div>
-                <div class="panel-extra-block">
-            <div class="work-grid">
-              <a class="work-card work-card--span-2 protected-link" href="https://www.figma.com/deck/7tZvvjMAGYWm2TyfyCSe6n" target="_blank" rel="noreferrer">
-                <h3 class="work-card__title">Shopping Lists</h3>
-                <p class="work-card__desc">AI-assisted shopping lists that understand intent, adapt in real time and drive more basket value.</p>
-                <span class="work-card__link">View case study</span>
-              </a>
-              <a class="work-card work-card--span-2 protected-link" href="https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko" target="_blank" rel="noreferrer">
-                <h3 class="work-card__title">Quick Shop</h3>
-                <p class="work-card__desc">Smart recommendations at the right moment to make shopping faster, easier and more relevant.</p>
-                <span class="work-card__link">View case study</span>
-              </a>
-              <a class="work-card protected-link" href="https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr" target="_blank" rel="noreferrer">
-                <h3 class="work-card__title">Cellar</h3>
-                <p class="work-card__desc">Redefining account strategy and onboarding to reduce delivery effort by over 50% while accelerating customer value.</p>
-                <span class="work-card__link">View case study</span>
-              </a>
-              <a class="work-card protected-link" href="https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc" target="_blank" rel="noreferrer">
-                <h3 class="work-card__title">PrimaryBid</h3>
-                <p class="work-card__desc">Simplifying complex IPO investment workflows for trust, clarity and confidence at every step.</p>
-                <span class="work-card__link">View case study</span>
-              </a>
-              <a class="work-card protected-link" href="https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12" target="_blank" rel="noreferrer">
-                <h3 class="work-card__title">Kaizen Languages</h3>
-                <p class="work-card__desc">iOS and Android AI language learning that adapts to motivation, ability and real-life progress.</p>
-                <span class="work-card__link">View case study</span>
-              </a>
-              <a class="work-card protected-link" href="https://www.jacinto.website/#work" target="_blank" rel="noreferrer">
-                <h3 class="work-card__title">Smarter</h3>
-                <p class="work-card__desc">Designing one connected app for the iKettle, Smarter Coffee and FridgeCam across a smart kitchen ecosystem.</p>
-                <span class="work-card__link">View case study</span>
-              </a>
-            </div>
-                </div>
-              </section>
-            </div>
           </div>
         </div>
 
@@ -1565,40 +1879,20 @@
         aria-labelledby="map-modal-title"
         tabindex="-1"
       >
-        <div class="map-modal__header">
-          <h2 class="map-modal__title" id="map-modal-title">
-            <svg class="map-modal__title-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M4 6.5 9 4l5 2.5 6-3v11.5l-6 3-5-2.5L4 18V6.5Z"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M9 6.5v11.5M14 9v11.5"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-            </svg>
-            Map
-          </h2>
-          <button
-            class="map-modal__close"
-            type="button"
-            data-close-map-modal
-            aria-label="Close portfolio map"
-          >
-            &times;
-          </button>
-        </div>
+        <h2 class="map-modal__sr-title" id="map-modal-title">Portfolio map</h2>
+        <button
+          class="map-modal__close"
+          type="button"
+          data-close-map-modal
+          aria-label="Close portfolio map"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </button>
         <div class="map-modal__body">
-          <div
-            id="map-desktop"
-            class="map-diagram map-diagram--desktop"
-            aria-label="Desktop portfolio map"
-          ></div>
-          <div id="map-mobile" class="map-diagram map-diagram--mobile" aria-label="Mobile portfolio map"></div>
+          <div id="map-axon" class="map-axon" aria-label="Portfolio underground network map"></div>
+          <div id="map-mobile" class="map-modal__mobile" aria-label="Portfolio destinations" aria-hidden="true"></div>
         </div>
       </div>
     </div>
@@ -2023,75 +2317,175 @@
         backgroundVideo.play().catch(() => {});
       });
 
+      const MAP_MOBILE_ORDER = [
+        "shoppingLists",
+        "quickShop",
+        "cellar",
+        "mealPlans",
+        "primaryBid",
+        "kaizen",
+        "portfolio",
+        "cv",
+        "linkedin",
+      ];
+
       const MAP_STOPS = {
         shoppingLists: {
+          id: "shoppingLists",
           title: "Shopping Lists",
           desc: "AI assisted grocery list creation that turns customer intent into a draft trolley with less effort.",
-          tone: "blue",
-          stroke: "#1e5fcc",
+          href: "https://www.figma.com/deck/7tZvvjMAGYWm2TyfyCSe6n",
         },
         quickShop: {
+          id: "quickShop",
           title: "Quick Shop",
           desc: "A faster weekly shopping experience designed to reduce repeat effort and speed up trolley building.",
-          tone: "lime",
-          stroke: "#16a34a",
+          href: "https://www.figma.com/deck/Uzc4dRWgotNcPkTVTJDPko",
         },
         primaryBid: {
+          id: "primaryBid",
           title: "PrimaryBid",
           desc: "A regulated fintech case study focused on making complex investment journeys clearer, safer and easier to use.",
-          tone: "green",
-          stroke: "#2d8a4e",
+          href: "https://www.figma.com/deck/hSkz3kH0FCQ4tQDZwMZ4yc",
         },
         kaizen: {
+          id: "kaizen",
           title: "Kaizen Languages",
           desc: "A mobile learning experience designed to improve retention, motivation and confidence through better practice loops.",
-          tone: "purple",
-          stroke: "#7b4ec9",
+          href: "https://www.figma.com/deck/W7GP77RWfz8nYHx9w4JE12",
         },
         cellar: {
+          id: "cellar",
           title: "Cellar PDP",
           desc: "A product page redesign that improves confidence, product understanding and purchase intent for wine shoppers.",
-          tone: "red",
-          stroke: "#c41e3a",
+          href: "https://www.figma.com/deck/4t4dj2KitDzjGJjtH6DNQr",
         },
         mealPlans: {
+          id: "mealPlans",
           title: "Meal Plans",
           desc: "A flexible meal planning journey that helps customers build shoppable weekly plans around real household needs.",
-          tone: "pink",
-          stroke: "#d63f86",
+          href: "https://www.figma.com/deck/FPpqy03EnPRKGLLGrJb2g4",
         },
         portfolio: {
+          id: "portfolio",
           title: "Portfolio Website",
-          tone: "orange",
-          stroke: "#e8740c",
+          href: "https://www.jacinto.website/",
         },
         linkedin: {
+          id: "linkedin",
           title: "LinkedIn",
-          tone: "orange",
-          stroke: "#e8740c",
+          href: "https://www.jacinto.website/",
         },
         cv: {
+          id: "cv",
           title: "CV",
-          tone: "orange",
-          stroke: "#e8740c",
+          href: "https://www.jacinto.website/",
         },
       };
 
-      const DESKTOP_HUB = { cx: 550, cy: 648 };
-      const DESKTOP_LEFT_STATION_X = 272;
-      const DESKTOP_LEFT_TRUNK_X = 306;
-      const DESKTOP_LEFT_GREEN_BRANCH_X = 448;
-      const DESKTOP_RIGHT_TRUNK_X = 692;
-      const DESKTOP_RIGHT_STATION_X = 766;
-      const DESKTOP_ORANGE_X = 734;
-      const DESKTOP_LABEL_GAP = 22;
-      const DESKTOP_LEFT_LABEL_WIDTH = 236;
-      const MOBILE_ROW_HEIGHT = 96;
-      const MOBILE_TITLE_ROW_HEIGHT = 36;
-      const MOBILE_GAP = 28;
-      const MOBILE_HUB_PADDING = 52;
-
+      const MAP_VIEW = { width: 2000, height: 1400, scale: 34, ox: 1020, oy: 860 };
+      const MODEL_SCALE_DESKTOP = 2.4;
+      const MODEL_SCALE_TABLET = 2.55;
+      const MODEL_SCALE_MOBILE = 2.75;
       const SVG_NS = "http://www.w3.org/2000/svg";
+      let mapLeadersObserver = null;
+      const LEADER_END_GAP_PX = 12;
+
+      const NETWORK_NODES = {
+        shoppingLists: {
+          x: -5.2,
+          y: -4.2,
+          z: -2,
+          w: 2.5,
+          d: 1.35,
+          kind: "large",
+          label: { x: 888, y: 44, align: "left", side: "top" },
+        },
+        quickShop: {
+          x: 5.2,
+          y: -4.2,
+          z: -2,
+          w: 2.5,
+          d: 1.35,
+          kind: "large",
+          label: { x: 1548, y: 188, align: "left", side: "right" },
+        },
+        cellar: {
+          x: -7.2,
+          y: -0.4,
+          z: -2,
+          w: 2.2,
+          d: 1.15,
+          kind: "large",
+          label: { x: 44, y: 318, align: "left", side: "left" },
+        },
+        mealPlans: {
+          x: -7,
+          y: 2.6,
+          z: -1,
+          w: 2.2,
+          d: 1.15,
+          kind: "large",
+          label: { x: 44, y: 568, align: "left", side: "left" },
+        },
+        primaryBid: {
+          x: -4.2,
+          y: 5.2,
+          z: -1,
+          w: 2,
+          d: 1.05,
+          kind: "large",
+          label: { x: 68, y: 1008, align: "left", side: "left" },
+        },
+        kaizen: {
+          x: 7.2,
+          y: 0.2,
+          z: -2,
+          w: 2.2,
+          d: 1.15,
+          kind: "large",
+          label: { x: 1548, y: 688, align: "left", side: "right" },
+        },
+        portfolio: {
+          x: 3.1,
+          y: 6.1,
+          z: 0,
+          w: 0.85,
+          d: 0.5,
+          kind: "exit",
+          label: { x: 720, y: 1208, align: "center", side: "bottom" },
+        },
+        cv: {
+          x: 4.1,
+          y: 6.9,
+          z: 0.45,
+          w: 0.75,
+          d: 0.45,
+          kind: "exit",
+          label: { x: 1000, y: 1272, align: "center", side: "bottom" },
+        },
+        linkedin: {
+          x: 5.1,
+          y: 7.7,
+          z: 0.9,
+          w: 0.75,
+          d: 0.45,
+          kind: "exit",
+          label: { x: 1280, y: 1208, align: "center", side: "bottom" },
+        },
+      };
+
+      const NETWORK_ROUTES = [
+        { id: "shoppingLists", path: [[0, 0, -4], [0, -1.2, -3.4], [-2.6, -2.6, -2.8], [-5.2, -4.2, -2]] },
+        { id: "quickShop", path: [[0, 0, -4], [0, -1.2, -3.4], [2.6, -2.6, -2.8], [5.2, -4.2, -2]] },
+        { id: "cellar", path: [[0, 0, -4], [-1.8, -0.2, -3.2], [-4.8, -0.4, -2.5], [-7.2, -0.4, -2]] },
+        { id: "mealPlans", path: [[0, 0, -4], [-1.6, 1.2, -3], [-4.5, 2.1, -1.8], [-7, 2.6, -1]] },
+        { id: "primaryBid", path: [[0, 0, -4], [-1.2, 2.2, -2.6], [-2.8, 3.8, -1.6], [-4.2, 5.2, -1]] },
+        { id: "kaizen", path: [[0, 0, -4], [1.8, 0, -3.2], [4.8, 0.1, -2.5], [7.2, 0.2, -2]] },
+        { id: "portfolio", path: [[0, 0, -4], [0.6, 1.4, -2.4], [1.6, 2.8, -1.2], [2.4, 4.6, -0.3], [3.1, 6.1, 0]] },
+        { id: "cv", path: [[3.1, 6.1, 0], [3.6, 6.5, 0.22], [4.1, 6.9, 0.45]] },
+        { id: "linkedin", path: [[4.1, 6.9, 0.45], [4.6, 7.3, 0.68], [5.1, 7.7, 0.9]] },
+      ];
 
       function svgEl(name, attrs = {}) {
         const node = document.createElementNS(SVG_NS, name);
@@ -2099,314 +2493,636 @@
         return node;
       }
 
-      function addRoutePath(svg, path, stroke) {
-        svg.appendChild(
-          svgEl("path", {
-            d: path,
-            fill: "none",
-            stroke,
-            "stroke-width": 10,
-            "stroke-linejoin": "miter",
-            "stroke-linecap": "butt",
+      function getModelScale() {
+        if (window.matchMedia("(max-width: 767px)").matches) {
+          return MODEL_SCALE_MOBILE;
+        }
+
+        if (window.matchMedia("(max-width: 1024px)").matches) {
+          return MODEL_SCALE_TABLET;
+        }
+
+        return MODEL_SCALE_DESKTOP;
+      }
+
+      function getModelCenter() {
+        return project(0, 0, -1.8);
+      }
+
+      function scaleAboutCenter(point, scale, center) {
+        return {
+          x: center.x + (point.x - center.x) * scale,
+          y: center.y + (point.y - center.y) * scale,
+        };
+      }
+
+      function projectModelAnchor(x, y, z, modelCenter, modelScale) {
+        return scaleAboutCenter(project(x, y, z), modelScale, modelCenter);
+      }
+
+      function setVectorEffect(node) {
+        if (
+          node.tagName === "path" ||
+          node.tagName === "line" ||
+          node.tagName === "polyline" ||
+          node.tagName === "circle" ||
+          node.tagName === "ellipse" ||
+          node.tagName === "polygon"
+        ) {
+          node.setAttribute("vector-effect", "non-scaling-stroke");
+        }
+      }
+
+      function appendModelNode(parent, node) {
+        setVectorEffect(node);
+        parent.appendChild(node);
+        return node;
+      }
+
+      function project(x, y, z) {
+        const s = MAP_VIEW.scale;
+        return {
+          x: MAP_VIEW.ox + (x - y) * 0.866 * s,
+          y: MAP_VIEW.oy + (x + y) * 0.5 * s - z * 17,
+        };
+      }
+
+      function pathFromPoints(points, yOffset = 0) {
+        return points
+          .map((point, index) => {
+            const p = project(point[0], point[1], point[2]);
+            return `${index === 0 ? "M" : "L"} ${(p.x).toFixed(1)} ${(p.y + yOffset).toFixed(1)}`;
+          })
+          .join(" ");
+      }
+
+      function platformCorners(cx, cy, cz, w, d) {
+        const hw = w / 2;
+        const hd = d / 2;
+        return [
+          project(cx - hw, cy - hd, cz),
+          project(cx + hw, cy - hd, cz),
+          project(cx + hw, cy + hd, cz),
+          project(cx - hw, cy + hd, cz),
+        ];
+      }
+
+      function polygonFromCorners(corners) {
+        return corners.map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
+      }
+
+      function drawTunnel(layer, waypoints, routeId) {
+        const d = pathFromPoints(waypoints);
+        const shadow = svgEl("path", { d: pathFromPoints(waypoints, 3), class: "map-axon__shadow" });
+        const outer = svgEl("path", {
+          d,
+          class: "map-axon__tunnel-outer",
+          "data-route": routeId,
+        });
+        const inner = svgEl("path", {
+          d,
+          class: "map-axon__tunnel",
+          "data-route": routeId,
+        });
+        appendModelNode(layer, shadow);
+        appendModelNode(layer, outer);
+        appendModelNode(layer, inner);
+
+        const start = waypoints[0];
+        const end = waypoints[waypoints.length - 1];
+        drawPortal(layer, start[0], start[1], start[2], routeId);
+        drawPortal(layer, end[0], end[1], end[2], routeId);
+      }
+
+      function drawPortal(layer, x, y, z, stopId) {
+        const p = project(x, y, z);
+        appendModelNode(
+          layer,
+          svgEl("ellipse", {
+            cx: p.x.toFixed(1),
+            cy: p.y.toFixed(1),
+            rx: 7,
+            ry: 4,
+            class: "map-axon__portal",
+            "data-stop": stopId,
           })
         );
       }
 
-      function addHub(svg, cx, cy) {
-        svg.appendChild(svgEl("circle", { cx, cy, r: 18, fill: "#0f172a" }));
-      }
+      function drawPlatform(layer, node, stopId) {
+        const corners = platformCorners(node.x, node.y, node.z, node.w, node.d);
+        const platform = svgEl("polygon", {
+          points: polygonFromCorners(corners),
+          class: `map-axon__platform map-axon__platform--${node.kind === "exit" ? "exit" : "large"}`,
+          "data-stop": stopId,
+        });
+        appendModelNode(layer, platform);
 
-      function addStation(svg, cx, cy) {
-        svg.appendChild(
+        const center = project(node.x, node.y, node.z);
+        const radius = node.kind === "exit" ? 5 : 7;
+        appendModelNode(
+          layer,
           svgEl("circle", {
-            cx,
-            cy,
-            r: 9,
-            fill: "#fff",
-            stroke: "#1e293b",
-            "stroke-width": 2.5,
+            cx: center.x.toFixed(1),
+            cy: center.y.toFixed(1),
+            r: radius,
+            class: "map-axon__marker",
+            "data-stop": stopId,
           })
         );
       }
 
-      function createMapCard(stop, { titleOnly = false } = {}) {
-        const card = document.createElement("article");
-        card.className = `map-card map-card--${stop.tone}${titleOnly ? " map-card--title-only" : ""}`;
+      function drawInterchange(layer) {
+        const decks = [
+          { r: 2.1, z: -4 },
+          { r: 1.55, z: -2.8 },
+          { r: 1.05, z: -1.6 },
+        ];
+
+        decks.forEach((deck) => {
+          const corners = platformCorners(0, 0, deck.z, deck.r * 2, deck.r * 2);
+          appendModelNode(
+            layer,
+            svgEl("polygon", {
+              points: polygonFromCorners(corners),
+              class: "map-axon__hub-deck",
+            })
+          );
+          const center = project(0, 0, deck.z);
+          appendModelNode(
+            layer,
+            svgEl("circle", {
+              cx: center.x.toFixed(1),
+              cy: center.y.toFixed(1),
+              r: (deck.r * MAP_VIEW.scale * 0.42).toFixed(1),
+              class: "map-axon__hub-ring",
+            })
+          );
+        });
+
+        const shaftTop = project(0, 0, 0.8);
+        const shaftBottom = project(0, 0, -4.4);
+        appendModelNode(
+          layer,
+          svgEl("line", {
+            x1: shaftTop.x.toFixed(1),
+            y1: shaftTop.y.toFixed(1),
+            x2: shaftBottom.x.toFixed(1),
+            y2: shaftBottom.y.toFixed(1),
+            class: "map-axon__shaft",
+          })
+        );
+      }
+
+      function drawStairs(layer, from, to, steps = 5) {
+        const group = svgEl("g", { class: "map-axon__stairs" });
+        for (let i = 0; i <= steps; i += 1) {
+          const t = i / steps;
+          const x = from[0] + (to[0] - from[0]) * t;
+          const y = from[1] + (to[1] - from[1]) * t;
+          const z = from[2] + (to[2] - from[2]) * t;
+          const p = project(x, y, z);
+          const p2 = project(x + 0.18, y - 0.12, z);
+          appendModelNode(
+            group,
+            svgEl("line", {
+              x1: p.x.toFixed(1),
+              y1: p.y.toFixed(1),
+              x2: p2.x.toFixed(1),
+              y2: p2.y.toFixed(1),
+            })
+          );
+        }
+        appendModelNode(layer, group);
+      }
+
+      function drawSurfaceCorridor(layer) {
+        const corridor = [
+          [1.2, 2.2, -1.2],
+          [1.8, 3.4, -0.6],
+          [2.5, 4.8, -0.1],
+          [3.1, 6.1, 0],
+        ];
+        const rail = corridor.map((point) => project(point[0], point[1], point[2] - 0.08));
+        appendModelNode(
+          layer,
+          svgEl("polyline", {
+            points: rail.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" "),
+            class: "map-axon__detail",
+          })
+        );
+      }
+
+      function domRectToViewBox(stageRect, rect) {
+        const scaleX = MAP_VIEW.width / stageRect.width;
+        const scaleY = MAP_VIEW.height / stageRect.height;
+
+        return {
+          left: (rect.left - stageRect.left) * scaleX,
+          top: (rect.top - stageRect.top) * scaleY,
+          right: (rect.right - stageRect.left) * scaleX,
+          bottom: (rect.bottom - stageRect.top) * scaleY,
+        };
+      }
+
+      function leaderGapToViewBox(stageRect) {
+        return {
+          x: (LEADER_END_GAP_PX * MAP_VIEW.width) / stageRect.width,
+          y: (LEADER_END_GAP_PX * MAP_VIEW.height) / stageRect.height,
+        };
+      }
+
+      function getLabelEdgePoint(labelRect, side, anchor, gap) {
+        const clampY = (y) => Math.min(labelRect.bottom, Math.max(labelRect.top, y));
+        const clampX = (x) => Math.min(labelRect.right, Math.max(labelRect.left, x));
+
+        if (side === "left") {
+          return {
+            x: labelRect.right + gap.x,
+            y: clampY(anchor.y),
+          };
+        }
+
+        if (side === "right") {
+          return {
+            x: labelRect.left - gap.x,
+            y: clampY(anchor.y),
+          };
+        }
+
+        if (side === "top") {
+          return {
+            x: clampX(anchor.x),
+            y: labelRect.bottom + gap.y,
+          };
+        }
+
+        return {
+          x: clampX(anchor.x),
+          y: labelRect.top - gap.y,
+        };
+      }
+
+      function buildLeaderPath(anchor, connect, side) {
+        const elbowOffset = 18;
+
+        if (side === "left") {
+          const elbowX = connect.x + elbowOffset;
+          return [
+            anchor,
+            { x: elbowX, y: anchor.y },
+            { x: elbowX, y: connect.y },
+            connect,
+          ];
+        }
+
+        if (side === "right") {
+          const elbowX = connect.x - elbowOffset;
+          return [
+            anchor,
+            { x: elbowX, y: anchor.y },
+            { x: elbowX, y: connect.y },
+            connect,
+          ];
+        }
+
+        if (side === "top") {
+          const elbowY = connect.y + elbowOffset;
+          return [
+            anchor,
+            { x: anchor.x, y: elbowY },
+            { x: connect.x, y: elbowY },
+            connect,
+          ];
+        }
+
+        const elbowY = connect.y - elbowOffset;
+        return [
+          anchor,
+          { x: anchor.x, y: elbowY },
+          { x: connect.x, y: elbowY },
+          connect,
+        ];
+      }
+
+      function disconnectMapLeadersObserver() {
+        if (mapLeadersObserver) {
+          mapLeadersObserver.disconnect();
+          mapLeadersObserver = null;
+        }
+      }
+
+      function updateMapLeaders(stage, layerLeaders, leaderEntries) {
+        const draw = () => {
+          layerLeaders.replaceChildren();
+          const stageRect = stage.getBoundingClientRect();
+
+          if (!stageRect.width || !stageRect.height) {
+            return;
+          }
+
+          const gap = leaderGapToViewBox(stageRect);
+
+          leaderEntries.forEach(({ station, anchor, side, stopId }) => {
+            const labelRect = domRectToViewBox(stageRect, station.getBoundingClientRect());
+            const connect = getLabelEdgePoint(labelRect, side, anchor, gap);
+            const leaderPath = buildLeaderPath(anchor, connect, side);
+            drawRoutedLeader(layerLeaders, leaderPath, stopId);
+          });
+        };
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(draw);
+        });
+
+        disconnectMapLeadersObserver();
+        mapLeadersObserver = new ResizeObserver(draw);
+        mapLeadersObserver.observe(stage);
+        stage._redrawLeaders = draw;
+      }
+
+      function drawRoutedLeader(layer, points, stopId) {
+        const d = points
+          .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`)
+          .join(" ");
+        layer.appendChild(
+          svgEl("path", {
+            d,
+            class: "map-axon__leader",
+            "data-stop": stopId,
+          })
+        );
+      }
+
+      function createMapStation(stop, { titleOnly = false } = {}) {
+        const station = document.createElement(stop.href ? "a" : "article");
+        station.className = `map-station${titleOnly ? " map-station--title-only" : ""}${
+          stop.href ? " protected-link" : ""
+        }`;
+        station.dataset.stopId = stop.id;
+
+        if (stop.href) {
+          station.href = stop.href;
+          station.target = "_blank";
+          station.rel = "noreferrer";
+        }
 
         const title = document.createElement("p");
-        title.className = "map-card__title";
+        title.className = "map-station__title";
         title.textContent = stop.title;
-        card.appendChild(title);
+        station.appendChild(title);
 
         if (!titleOnly && stop.desc) {
           const desc = document.createElement("p");
-          desc.className = "map-card__desc";
+          desc.className = "map-station__desc";
           desc.textContent = stop.desc;
-          card.appendChild(desc);
+          station.appendChild(desc);
         }
 
-        return card;
+        return station;
       }
 
-      function positionCard(card, left, top) {
-        card.style.left = `${(left / 1100) * 100}%`;
-        card.style.top = `${(top / 760) * 100}%`;
-      }
+      function positionMapLabel(station, node, stopId, modelCenter, modelScale) {
+        const anchor = projectModelAnchor(node.x, node.y, node.z, modelCenter, modelScale);
+        const label = node.label;
 
-      function positionCardLeftOfStation(card, stationX, stationY) {
-        card.classList.add("map-card--anchor-left");
-        positionCard(
-          card,
-          stationX - DESKTOP_LABEL_GAP - DESKTOP_LEFT_LABEL_WIDTH,
-          stationY - 42
-        );
-      }
+        station.style.left = `${(label.x / MAP_VIEW.width) * 100}%`;
+        station.style.top = `${(label.y / MAP_VIEW.height) * 100}%`;
 
-      function positionCardRightOfStation(card, stationX, stationY) {
-        card.classList.add("map-card--anchor-right");
-        positionCard(card, stationX + DESKTOP_LABEL_GAP, stationY - 40);
-      }
-
-      function positionCardAboveStation(card, stationX, stationY) {
-        card.classList.add("map-card--anchor-center");
-        positionCard(card, stationX - 138, stationY - 142);
-      }
-
-      function positionCardTitleBesideStation(card, stationX, stationY) {
-        card.classList.add("map-card--anchor-right", "map-card--title-only");
-        positionCard(card, stationX + DESKTOP_LABEL_GAP, stationY - 12);
-      }
-
-      function renderDesktopMap(root) {
-        const stage = document.createElement("div");
-        stage.className = "map-stage";
-
-        const svg = svgEl("svg", {
-          class: "map-stage__svg",
-          viewBox: "0 0 1100 760",
-          role: "img",
-          "aria-label": "Portfolio case study map",
-        });
-
-        const hubX = DESKTOP_HUB.cx;
-        const hubY = DESKTOP_HUB.cy;
-        const leftTrunkX = DESKTOP_LEFT_TRUNK_X;
-        const leftGreenBranchX = DESKTOP_LEFT_GREEN_BRANCH_X;
-        const leftStationX = DESKTOP_LEFT_STATION_X;
-        const rightTrunkX = DESKTOP_RIGHT_TRUNK_X;
-        const rightStationX = DESKTOP_RIGHT_STATION_X;
-        const orangeX = DESKTOP_ORANGE_X;
-        const blueX = hubX - 6;
-
-        const stops = {
-          cellar: { x: leftStationX, y: 92 },
-          mealPlans: { x: leftStationX, y: 312 },
-          primaryBid: { x: leftStationX, y: 532 },
-          shoppingLists: { x: blueX, y: 158 },
-          quickShop: { x: rightStationX, y: 92 },
-          kaizen: { x: rightStationX, y: 312 },
-          portfolio: { x: orangeX, y: 492 },
-          cv: { x: orangeX, y: 526 },
-          linkedin: { x: orangeX, y: 560 },
-        };
-
-        addRoutePath(svg, `M ${blueX} ${hubY} V ${stops.shoppingLists.y}`, MAP_STOPS.shoppingLists.stroke);
-        addRoutePath(
-          svg,
-          `M ${hubX} ${hubY} H ${leftTrunkX} V ${stops.cellar.y} H ${stops.cellar.x}`,
-          MAP_STOPS.cellar.stroke
-        );
-        addRoutePath(
-          svg,
-          `M ${hubX} ${hubY} H ${leftTrunkX} V ${stops.mealPlans.y} H ${stops.mealPlans.x}`,
-          MAP_STOPS.mealPlans.stroke
-        );
-        addRoutePath(
-          svg,
-          `M ${hubX} ${hubY} H ${leftGreenBranchX} V ${stops.primaryBid.y} H ${stops.primaryBid.x}`,
-          MAP_STOPS.primaryBid.stroke
-        );
-        addRoutePath(
-          svg,
-          `M ${hubX} ${hubY} H ${rightTrunkX} V ${stops.quickShop.y} H ${stops.quickShop.x}`,
-          MAP_STOPS.quickShop.stroke
-        );
-        addRoutePath(
-          svg,
-          `M ${hubX} ${hubY} H ${rightTrunkX} V ${stops.kaizen.y} H ${stops.kaizen.x}`,
-          MAP_STOPS.kaizen.stroke
-        );
-        addRoutePath(
-          svg,
-          `M ${hubX} ${hubY} H ${orangeX} V ${stops.portfolio.y}`,
-          MAP_STOPS.portfolio.stroke
-        );
-
-        addStation(svg, stops.cellar.x, stops.cellar.y);
-        addStation(svg, stops.mealPlans.x, stops.mealPlans.y);
-        addStation(svg, stops.primaryBid.x, stops.primaryBid.y);
-        addStation(svg, stops.shoppingLists.x, stops.shoppingLists.y);
-        addStation(svg, stops.quickShop.x, stops.quickShop.y);
-        addStation(svg, stops.kaizen.x, stops.kaizen.y);
-        addStation(svg, stops.portfolio.x, stops.portfolio.y);
-        addStation(svg, stops.cv.x, stops.cv.y);
-        addStation(svg, stops.linkedin.x, stops.linkedin.y);
-        addHub(svg, hubX, hubY);
-
-        stage.appendChild(svg);
-
-        const cellarCard = createMapCard(MAP_STOPS.cellar);
-        positionCardLeftOfStation(cellarCard, stops.cellar.x, stops.cellar.y);
-        stage.appendChild(cellarCard);
-
-        const mealPlansCard = createMapCard(MAP_STOPS.mealPlans);
-        positionCardLeftOfStation(mealPlansCard, stops.mealPlans.x, stops.mealPlans.y);
-        stage.appendChild(mealPlansCard);
-
-        const primaryBidCard = createMapCard(MAP_STOPS.primaryBid);
-        positionCardLeftOfStation(primaryBidCard, stops.primaryBid.x, stops.primaryBid.y);
-        stage.appendChild(primaryBidCard);
-
-        const shoppingCard = createMapCard(MAP_STOPS.shoppingLists);
-        positionCardAboveStation(shoppingCard, stops.shoppingLists.x, stops.shoppingLists.y);
-        stage.appendChild(shoppingCard);
-
-        const quickShopCard = createMapCard(MAP_STOPS.quickShop);
-        positionCardRightOfStation(quickShopCard, stops.quickShop.x, stops.quickShop.y);
-        stage.appendChild(quickShopCard);
-
-        const kaizenCard = createMapCard(MAP_STOPS.kaizen);
-        positionCardRightOfStation(kaizenCard, stops.kaizen.x, stops.kaizen.y);
-        stage.appendChild(kaizenCard);
-
-        const portfolioCard = createMapCard(MAP_STOPS.portfolio, { titleOnly: true });
-        positionCardTitleBesideStation(portfolioCard, stops.portfolio.x, stops.portfolio.y);
-        stage.appendChild(portfolioCard);
-
-        const cvCard = createMapCard(MAP_STOPS.cv, { titleOnly: true });
-        positionCardTitleBesideStation(cvCard, stops.cv.x, stops.cv.y);
-        stage.appendChild(cvCard);
-
-        const linkedinCard = createMapCard(MAP_STOPS.linkedin, { titleOnly: true });
-        positionCardTitleBesideStation(linkedinCard, stops.linkedin.x, stops.linkedin.y);
-        stage.appendChild(linkedinCard);
-
-        root.replaceChildren(stage);
-      }
-
-      function getMobileLayout() {
-        const rowHeights = [
-          MOBILE_ROW_HEIGHT,
-          MOBILE_ROW_HEIGHT,
-          MOBILE_ROW_HEIGHT,
-          MOBILE_ROW_HEIGHT,
-          MOBILE_ROW_HEIGHT,
-          MOBILE_ROW_HEIGHT,
-          MOBILE_TITLE_ROW_HEIGHT,
-          MOBILE_TITLE_ROW_HEIGHT,
-          MOBILE_TITLE_ROW_HEIGHT,
-        ];
-
-        let offset = 18;
-        const rowCenters = rowHeights.map((height) => {
-          const center = offset + height / 2;
-          offset += height + MOBILE_GAP;
-          return center;
-        });
-
-        const contentBottom = rowCenters[rowCenters.length - 1] + MOBILE_TITLE_ROW_HEIGHT / 2;
-        const hubY = contentBottom + MOBILE_HUB_PADDING;
-        const totalHeight = hubY + 24;
-
-        return { rowCenters, hubY, totalHeight };
-      }
-
-      function renderMobileMap(root) {
-        const { rowCenters, hubY, totalHeight } = getMobileLayout();
-        const spineX = 22;
-        const stationX = 58;
-        const orangeRailX = 14;
-
-        const stage = document.createElement("div");
-        stage.className = "map-mobile-stage";
-
-        const rail = document.createElement("div");
-        rail.className = "map-mobile-stage__rail";
-        rail.style.minHeight = `${totalHeight}px`;
-
-        const svg = svgEl("svg", {
-          class: "map-mobile-stage__svg",
-          viewBox: `0 0 72 ${totalHeight}`,
-          role: "img",
-          "aria-label": "Portfolio case study map for mobile",
-          preserveAspectRatio: "xMinYMin meet",
-        });
-
-        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[0]} H ${stationX}`, MAP_STOPS.shoppingLists.stroke);
-        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[1]} H ${stationX}`, MAP_STOPS.quickShop.stroke);
-        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[2]} H ${stationX}`, MAP_STOPS.cellar.stroke);
-        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[3]} H ${stationX}`, MAP_STOPS.mealPlans.stroke);
-        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[4]} H ${stationX}`, MAP_STOPS.primaryBid.stroke);
-        addRoutePath(svg, `M ${spineX} ${hubY} V ${rowCenters[5]} H ${stationX}`, MAP_STOPS.kaizen.stroke);
-        addRoutePath(
-          svg,
-          `M ${spineX} ${hubY} H ${orangeRailX} V ${rowCenters[6]} H ${stationX} M ${orangeRailX} ${rowCenters[6]} V ${rowCenters[7]} H ${stationX} M ${orangeRailX} ${rowCenters[7]} V ${rowCenters[8]} H ${stationX}`,
-          MAP_STOPS.portfolio.stroke
-        );
-
-        rowCenters.forEach((rowY) => {
-          addStation(svg, stationX, rowY);
-        });
-        addHub(svg, spineX, hubY);
-
-        rail.appendChild(svg);
-
-        const cardsWrap = document.createElement("div");
-        cardsWrap.className = "map-mobile-stage__cards";
-
-        [
-          MAP_STOPS.shoppingLists,
-          MAP_STOPS.quickShop,
-          MAP_STOPS.cellar,
-          MAP_STOPS.mealPlans,
-          MAP_STOPS.primaryBid,
-          MAP_STOPS.kaizen,
-          MAP_STOPS.portfolio,
-          MAP_STOPS.cv,
-          MAP_STOPS.linkedin,
-        ].forEach((stop, index) => {
-          const titleOnly = index >= 6;
-          cardsWrap.appendChild(createMapCard(stop, { titleOnly }));
-        });
-
-        stage.appendChild(rail);
-        stage.appendChild(cardsWrap);
-        root.replaceChildren(stage);
-      }
-
-      function syncMapDiagramVisibility() {
-        const desktopRoot = document.getElementById("map-desktop");
-        const mobileRoot = document.getElementById("map-mobile");
-        if (!desktopRoot || !mobileRoot) {
-          return;
+        if (label.align === "center") {
+          station.classList.add("map-station--align-center");
+          station.style.transform = "translateX(-50%)";
         }
 
-        const isMobile = window.matchMedia("(max-width: 767px)").matches;
-        desktopRoot.setAttribute("aria-hidden", String(isMobile));
-        mobileRoot.setAttribute("aria-hidden", String(!isMobile));
+        return { station, anchor, side: label.side, stopId };
+      }
+
+      function bindMapHover(stage) {
+        const stations = stage.querySelectorAll(".map-station[data-stop-id]");
+        const routes = stage.querySelectorAll("[data-route]");
+        const markers = stage.querySelectorAll("[data-stop]");
+
+        function setActive(stopId, isActive) {
+          routes.forEach((route) => {
+            if (route.dataset.route === stopId) {
+              route.classList.toggle("is-active", isActive);
+            }
+          });
+          markers.forEach((marker) => {
+            if (marker.dataset.stop === stopId) {
+              marker.classList.toggle("is-active", isActive);
+            }
+          });
+          stations.forEach((station) => {
+            if (station.dataset.stopId === stopId) {
+              station.classList.toggle("is-active", isActive);
+            }
+          });
+        }
+
+        stations.forEach((station) => {
+          const stopId = station.dataset.stopId;
+          station.addEventListener("mouseenter", () => setActive(stopId, true));
+          station.addEventListener("mouseleave", () => setActive(stopId, false));
+          station.addEventListener("focus", () => setActive(stopId, true));
+          station.addEventListener("blur", () => setActive(stopId, false));
+        });
+      }
+
+      function renderAxonometricMap(root) {
+        const viewport = document.createElement("div");
+        viewport.className = "map-axon__viewport";
+
+        const scene = document.createElement("div");
+        scene.className = "map-axon__scene";
+
+        const stage = document.createElement("div");
+        stage.className = "map-axon__stage";
+
+        const viewBox = `0 0 ${MAP_VIEW.width} ${MAP_VIEW.height}`;
+        const modelCenter = getModelCenter();
+        const modelScale = getModelScale();
+        const cx = modelCenter.x;
+        const cy = modelCenter.y;
+
+        const modelSvg = svgEl("svg", {
+          class: "map-axon__svg map-axon__svg--model",
+          viewBox,
+          role: "presentation",
+          "aria-hidden": "true",
+        });
+
+        const leadersSvg = svgEl("svg", {
+          class: "map-axon__svg map-axon__svg--leaders",
+          viewBox,
+          role: "presentation",
+          "aria-hidden": "true",
+        });
+
+        const mapModel = svgEl("g", {
+          class: "map-model",
+          transform: `translate(${cx.toFixed(1)} ${cy.toFixed(1)}) scale(${modelScale}) translate(${(-cx).toFixed(1)} ${(-cy).toFixed(1)})`,
+        });
+
+        const layerDeep = svgEl("g", { class: "map-axon__layer map-axon__layer--deep" });
+        const layerMid = svgEl("g", { class: "map-axon__layer map-axon__layer--mid" });
+        const layerSurface = svgEl("g", { class: "map-axon__layer map-axon__layer--surface" });
+        const layerDetail = svgEl("g", { class: "map-axon__layer map-axon__layer--detail" });
+        const layerLeaders = svgEl("g", { class: "map-axon__layer map-axon__layer--detail" });
+
+        drawInterchange(layerDeep);
+
+        NETWORK_ROUTES.forEach((route) => {
+          const targetLayer =
+            route.id === "portfolio" || route.id === "cv" || route.id === "linkedin"
+              ? layerSurface
+              : layerMid;
+          drawTunnel(targetLayer, route.path, route.id);
+        });
+
+        drawStairs(layerDetail, [0.4, 0.8, -1.4], [1.2, 2.2, -1.2]);
+        drawStairs(layerDetail, [2.2, 4.2, -0.5], [3.1, 6.1, 0]);
+        drawSurfaceCorridor(layerSurface);
+
+        Object.entries(NETWORK_NODES).forEach(([stopId, node]) => {
+          const layer = node.kind === "exit" ? layerSurface : layerMid;
+          drawPlatform(layer, node, stopId);
+        });
+
+        mapModel.appendChild(layerDeep);
+        mapModel.appendChild(layerMid);
+        mapModel.appendChild(layerSurface);
+        mapModel.appendChild(layerDetail);
+        modelSvg.appendChild(mapModel);
+
+        const labels = document.createElement("div");
+        labels.className = "map-axon__labels";
+        const leaderEntries = [];
+
+        Object.entries(NETWORK_NODES).forEach(([stopId, node]) => {
+          const stop = MAP_STOPS[stopId];
+          const titleOnly = node.kind === "exit";
+          const station = createMapStation(stop, { titleOnly });
+          const entry = positionMapLabel(station, node, stopId, modelCenter, modelScale);
+          leaderEntries.push(entry);
+          labels.appendChild(station);
+        });
+
+        leadersSvg.appendChild(layerLeaders);
+
+        stage.appendChild(modelSvg);
+        stage.appendChild(leadersSvg);
+        stage.appendChild(labels);
+        scene.appendChild(stage);
+        viewport.appendChild(scene);
+        bindMapHover(stage);
+        disconnectMapLeadersObserver();
+        root.replaceChildren(viewport);
+        updateMapLeaders(stage, layerLeaders, leaderEntries);
+      }
+
+      let mapBreakpoint = null;
+      let mapLayoutMode = null;
+
+      function isMapMobileLayout() {
+        return window.matchMedia("(max-width: 544px)").matches;
+      }
+
+      function syncMapLayoutVisibility(axonRoot, mobileRoot) {
+        const mobile = isMapMobileLayout();
+
+        axonRoot.setAttribute("aria-hidden", mobile ? "true" : "false");
+        mobileRoot.setAttribute("aria-hidden", mobile ? "false" : "true");
+      }
+
+      function renderMobileMapList(root) {
+        const list = document.createElement("div");
+        list.className = "map-modal__mobile-list";
+
+        MAP_MOBILE_ORDER.forEach((stopId) => {
+          const stop = MAP_STOPS[stopId];
+          const item = document.createElement("a");
+          const linkOnly = !stop.desc;
+
+          item.className = `map-mobile-item${linkOnly ? " map-mobile-item--link-only" : ""} protected-link`;
+          item.href = stop.href;
+          item.target = "_blank";
+          item.rel = "noreferrer";
+
+          const title = document.createElement("p");
+          title.className = "map-mobile-item__title";
+          title.textContent = stop.title;
+          item.appendChild(title);
+
+          if (stop.desc) {
+            const desc = document.createElement("p");
+            desc.className = "map-mobile-item__desc";
+            desc.textContent = stop.desc;
+            item.appendChild(desc);
+          }
+
+          list.appendChild(item);
+        });
+
+        root.replaceChildren(list);
+      }
+
+      function getMapBreakpoint() {
+        if (window.matchMedia("(max-width: 767px)").matches) {
+          return "mobile";
+        }
+
+        if (window.matchMedia("(max-width: 1024px)").matches) {
+          return "tablet";
+        }
+
+        return "desktop";
       }
 
       function initPortfolioMaps() {
-        const desktopRoot = document.getElementById("map-desktop");
+        const axonRoot = document.getElementById("map-axon");
         const mobileRoot = document.getElementById("map-mobile");
-        if (desktopRoot) {
-          renderDesktopMap(desktopRoot);
+
+        if (!axonRoot || !mobileRoot) {
+          return;
         }
-        if (mobileRoot) {
-          renderMobileMap(mobileRoot);
+
+        renderMobileMapList(mobileRoot);
+
+        function renderAxonIfNeeded() {
+          syncMapLayoutVisibility(axonRoot, mobileRoot);
+
+          if (isMapMobileLayout()) {
+            disconnectMapLeadersObserver();
+            axonRoot.replaceChildren();
+            return;
+          }
+
+          renderAxonometricMap(axonRoot);
+          mapBreakpoint = getMapBreakpoint();
         }
-        syncMapDiagramVisibility();
-        window.addEventListener("resize", syncMapDiagramVisibility);
+
+        mapLayoutMode = isMapMobileLayout() ? "list" : "map";
+        renderAxonIfNeeded();
+
+        window.addEventListener("resize", () => {
+          const mobile = isMapMobileLayout();
+          const nextLayout = mobile ? "list" : "map";
+
+          if (nextLayout !== mapLayoutMode) {
+            mapLayoutMode = nextLayout;
+            renderAxonIfNeeded();
+            return;
+          }
+
+          if (!mobile) {
+            const nextBreakpoint = getMapBreakpoint();
+            if (nextBreakpoint !== mapBreakpoint) {
+              mapBreakpoint = nextBreakpoint;
+              renderAxonometricMap(axonRoot);
+            }
+          }
+        });
       }
 
       initPortfolioMaps();
@@ -2470,21 +3186,24 @@
         passwordForm.reset();
       }
 
-      protectedLinks.forEach((link) => {
-        link.addEventListener("click", (event) => {
-          event.preventDefault();
-          const url = link.href;
-          const target = link.target || "_self";
+      document.addEventListener("click", (event) => {
+        const link = event.target.closest(".protected-link");
+        if (!link) {
+          return;
+        }
 
-          closeMobileNav();
+        event.preventDefault();
+        const url = link.href;
+        const target = link.target || "_self";
 
-          if (isUnlocked()) {
-            openProtectedLink(url, target);
-            return;
-          }
+        closeMobileNav();
 
-          openPasswordModal(url, target);
-        });
+        if (isUnlocked()) {
+          openProtectedLink(url, target);
+          return;
+        }
+
+        openPasswordModal(url, target);
       });
 
       passwordForm.addEventListener("submit", (event) => {
@@ -2528,7 +3247,23 @@
 
         mapLastFocusedElement = document.activeElement;
         mapModal.hidden = false;
+        mapModal.classList.remove("is-open");
+        mapModal.querySelectorAll(".map-axon__scene, .map-axon__layer").forEach((layer) => {
+          layer.style.animation = "none";
+        });
+        void mapModal.offsetHeight;
+        mapModal.querySelectorAll(".map-axon__scene, .map-axon__layer").forEach((layer) => {
+          layer.style.animation = "";
+        });
+        mapModal.classList.add("is-open");
         document.body.classList.add("map-modal-open");
+
+        const mapStage = document.querySelector(".map-axon__stage");
+        if (mapStage?._redrawLeaders) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(mapStage._redrawLeaders);
+          });
+        }
 
         const focusable = getMapFocusableElements();
         (focusable[0] || mapDialog).focus();
@@ -2540,6 +3275,7 @@
         }
 
         mapModal.hidden = true;
+        mapModal.classList.remove("is-open");
         document.body.classList.remove("map-modal-open");
 
         if (mapLastFocusedElement && typeof mapLastFocusedElement.focus === "function") {
