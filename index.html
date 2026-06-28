@@ -15,8 +15,12 @@
       :root {
         --text: #f8fbff;
         --muted: rgba(248, 251, 255, 0.78);
-        --glass: rgba(240, 246, 255, 0.16);
-        --glass-border: rgba(246, 250, 255, 0.4);
+        --glass: rgba(2, 10, 22, 0.12);
+        --glass-border: rgba(255, 255, 255, 0.22);
+        --work-card-glass: rgba(2, 10, 22, 0.1);
+        --work-card-glass-hover: rgba(8, 18, 34, 0.22);
+        --work-card-border: rgba(255, 255, 255, 0.2);
+        --work-card-border-hover: rgba(255, 255, 255, 0.34);
         --primary: #d7e8ff;
         --dark: rgba(4, 10, 20, 0.7);
         --panel-title-size: 40px;
@@ -238,32 +242,103 @@
 
       .work-card {
         position: relative;
-        border: 1px solid #ffffff;
-        border-radius: 12px;
-        background: transparent;
+        isolation: isolate;
+        overflow: hidden;
+        border: 1px solid var(--work-card-border);
+        border-radius: 16px;
+        background: var(--work-card-glass);
+        backdrop-filter: blur(10px) saturate(1.1);
+        -webkit-backdrop-filter: blur(10px) saturate(1.1);
+        box-shadow:
+          0 8px 28px rgba(2, 10, 22, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.14),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.04);
         padding: 1rem 1.05rem;
         display: flex;
         flex-direction: column;
         gap: 0.65rem;
         min-height: 9.5rem;
         transform-style: preserve-3d;
-        transition: background 200ms ease;
+        transition:
+          background 220ms ease,
+          border-color 220ms ease,
+          box-shadow 220ms ease;
         text-decoration: none;
         color: inherit;
         cursor: pointer;
       }
 
+      .work-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.025) 30%,
+            rgba(255, 255, 255, 0) 54%
+          ),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0%, transparent 48%);
+        opacity: 0.75;
+        z-index: 0;
+      }
+
+      .work-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        z-index: 0;
+      }
+
+      .work-card > * {
+        position: relative;
+        z-index: 1;
+      }
+
       .work-card:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--work-card-glass-hover);
+        border-color: var(--work-card-border-hover);
+        box-shadow:
+          0 10px 32px rgba(2, 10, 22, 0.22),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      .work-card:hover::before {
+        background:
+          linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.16) 0%,
+            rgba(255, 255, 255, 0.04) 32%,
+            rgba(255, 255, 255, 0) 56%
+          ),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+        opacity: 0.85;
       }
 
       .work-card:focus-visible {
-        outline: 2px solid #ffffff;
+        outline: 2px solid rgba(255, 255, 255, 0.85);
         outline-offset: 3px;
       }
 
       .work-card.is-resetting {
-        transition: transform 220ms ease, background 200ms ease;
+        transition: transform 220ms ease, background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+      }
+
+      @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+        .work-card {
+          background: rgba(2, 10, 22, 0.55);
+        }
+
+        .work-card:hover {
+          background: rgba(8, 18, 34, 0.68);
+        }
       }
 
       .work-card--span-2 {
@@ -1340,11 +1415,11 @@
         }
 
         .work-card {
-          transition: background 200ms ease;
+          transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
         }
 
         .work-card.is-resetting {
-          transition: background 200ms ease;
+          transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
         }
 
         .tool-item__icon--mono {
@@ -2101,8 +2176,8 @@
         }
 
         const svgNs = "http://www.w3.org/2000/svg";
-        const radius = 20;
-        const maxScale = 30;
+        const radius = 36;
+        const maxScale = 54;
         const chars = [];
         const originalText = title.textContent.trim();
 
@@ -2111,16 +2186,16 @@
           const filterId = `hero-title-distort-${index}`;
 
           filter.setAttribute("id", filterId);
-          filter.setAttribute("x", "-80%");
-          filter.setAttribute("y", "-80%");
-          filter.setAttribute("width", "260%");
-          filter.setAttribute("height", "260%");
+          filter.setAttribute("x", "-90%");
+          filter.setAttribute("y", "-90%");
+          filter.setAttribute("width", "280%");
+          filter.setAttribute("height", "280%");
           filter.setAttribute("color-interpolation-filters", "sRGB");
 
           const noise = document.createElementNS(svgNs, "feTurbulence");
           noise.setAttribute("type", "fractalNoise");
-          noise.setAttribute("baseFrequency", "0.014 0.04");
-          noise.setAttribute("numOctaves", "2");
+          noise.setAttribute("baseFrequency", "0.018 0.045");
+          noise.setAttribute("numOctaves", "3");
           noise.setAttribute("seed", "2");
           noise.setAttribute("result", "noise");
 
@@ -2160,8 +2235,8 @@
                 filterId: filter.filterId,
                 currentScale: 0,
                 targetScale: 0,
-                currentFreqY: 0.04,
-                targetFreqY: 0.04,
+                currentFreqY: 0.045,
+                targetFreqY: 0.045,
               });
 
               wordSpan.appendChild(charSpan);
@@ -2193,19 +2268,23 @@
           let needsFrame = false;
 
           chars.forEach((char) => {
-            char.currentScale += (char.targetScale - char.currentScale) * 0.14;
-            char.currentFreqY += (char.targetFreqY - char.currentFreqY) * 0.14;
+            char.currentScale += (char.targetScale - char.currentScale) * 0.24;
+            char.currentFreqY += (char.targetFreqY - char.currentFreqY) * 0.24;
 
             char.displace.setAttribute("scale", char.currentScale.toFixed(2));
             char.noise.setAttribute(
               "baseFrequency",
-              `0.014 ${char.currentFreqY.toFixed(4)}`
+              `0.018 ${char.currentFreqY.toFixed(4)}`
             );
 
-            if (char.currentScale > 0.35) {
+            if (char.currentScale > 0.08) {
               char.el.style.filter = `url("#${char.filterId}")`;
-            } else if (char.targetScale === 0 && char.currentScale < 0.08) {
+              const lift = 1 + (char.currentScale / maxScale) * 0.06;
+              const skew = (char.currentScale / maxScale) * 4;
+              char.el.style.transform = `scale(${lift.toFixed(3)}) skewX(${skew.toFixed(2)}deg)`;
+            } else if (char.targetScale === 0 && char.currentScale < 0.04) {
               char.el.style.filter = "";
+              char.el.style.transform = "";
             }
 
             if (
@@ -2234,7 +2313,7 @@
             const influence = smoothstep(Math.max(0, 1 - distance / radius));
 
             char.targetScale = influence * maxScale;
-            char.targetFreqY = 0.04 + influence * 0.05;
+            char.targetFreqY = 0.045 + influence * 0.09;
           });
 
           startAnimation();
@@ -2243,7 +2322,7 @@
         title.addEventListener("mouseleave", () => {
           chars.forEach((char) => {
             char.targetScale = 0;
-            char.targetFreqY = 0.04;
+            char.targetFreqY = 0.045;
           });
 
           startAnimation();
